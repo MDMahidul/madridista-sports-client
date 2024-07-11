@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Container from "../Container/Container";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { EnvelopeIcon,PhoneIcon,MapPinIcon } from "@heroicons/react/24/solid";
+import { EnvelopeIcon,PhoneIcon } from "@heroicons/react/24/solid";
 
 const Footer = () => {
   const year = new Date().getFullYear();

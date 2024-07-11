@@ -1,20 +1,23 @@
 import { motion, Variants } from "framer-motion";
 import { ReactNode } from "react";
 
-type FadeInUpAnimationProps= {
+type SlideInFromLeftProps = {
   children: ReactNode;
   custom?: number;
-}
+};
 
-const FadeInUpAnimation = ({ children, custom }: FadeInUpAnimationProps) => {
-  const fadeInAnimation: Variants = {
+const SlideInFromLeft = ({
+  children,
+  custom,
+}: SlideInFromLeftProps) => {
+  const slideInFromLeft: Variants = {
     initial: {
       opacity: 0,
-      y: 100,
+      x: -100,
     },
     animate: (index: number) => ({
       opacity: 1,
-      y: 0,
+      x: 0,
       transition: {
         delay: 0.07 * index,
         duration: 0.5,
@@ -24,7 +27,7 @@ const FadeInUpAnimation = ({ children, custom }: FadeInUpAnimationProps) => {
 
   return (
     <motion.div
-      variants={fadeInAnimation}
+      variants={slideInFromLeft}
       initial="initial"
       whileInView="animate"
       viewport={{ once: true }}
@@ -35,4 +38,4 @@ const FadeInUpAnimation = ({ children, custom }: FadeInUpAnimationProps) => {
   );
 };
 
-export default FadeInUpAnimation;
+export default SlideInFromLeft;

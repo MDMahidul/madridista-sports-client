@@ -1,0 +1,52 @@
+{
+  "staffs": [
+    {
+        "id":1,
+      "name": "John Doe",
+      "designation": "CEO",
+      "email": "john.doe@madridistasports.com",
+      "phone": "+1-555-123-4567",
+      "image": "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "designation": "Chief Marketing Officer",
+      "email": "jane.smith@madridistasports.com",
+      "phone": "+1-555-234-5678",
+      "image": "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": 3,
+      "name": "Michael Brown",
+      "designation": "Head of Sales",
+      "email": "michael.brown@madridistasports.com",
+      "phone": "+1-555-345-6789",
+      "image": "https://images.pexels.com/photos/5674944/pexels-photo-5674944.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": 4,
+      "name": "Emily Johnson",
+      "designation": "Customer Support Manager",
+      "email": "emily.johnson@madridistasports.com",
+      "phone": "+1-555-456-7890",
+      "image": "https://images.pexels.com/photos/1134246/pexels-photo-1134246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id":5,
+      "name": "David Wilson",
+      "designation": "Logistics Coordinator",
+      "email": "david.wilson@madridistasports.com",
+      "phone": "+1-555-567-8901",
+      "image": "https://images.pexels.com/photos/6325964/pexels-photo-6325964.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": 6,
+      "name": "Sarah Davis",
+      "designation": "Finance Manager",
+      "email": "sarah.davis@madridistasports.com",
+      "phone": "+1-555-678-9012",
+      "image": "https://images.pexels.com/photos/1587009/pexels-photo-1587009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    }
+  ]
+}

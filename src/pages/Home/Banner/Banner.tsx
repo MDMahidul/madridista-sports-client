@@ -69,6 +69,7 @@ const Banner = () => {
         {sliderData.map((item) => (
           <SwiperSlide>
             <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent bg-opacity-60 dark:bg-opacity-80"></div>
               <img src={item.image} alt="" />
             </div>
             <div className="absolute">
@@ -79,14 +80,14 @@ const Banner = () => {
                   }`}
                 >
                   <div className="flex items-end gap-2">
-                    <p className="md:offer-percent text-3xl md:text-9xl font-semibold text-tertiary font-robotoSlab">
+                    <p className="offer-percent text-3xl md:text-9xl font-semibold text-tertiary font-robotoSlab">
                       {item.offer}
                     </p>
-                    <span className="md:offer-percent text-tertiary font-semibold md:font-bold md:text-2xl">
+                    <span className="offer-percent text-tertiary font-semibold md:font-bold md:text-2xl">
                       Off
                     </span>
                   </div>
-                  <p className="md:product-name md:text-4xl font-bold text-secondary">
+                  <p className="product-name md:text-4xl font-bold text-secondary !mb-2">
                     {item.name}
                   </p>
                   <Link
@@ -99,7 +100,7 @@ const Banner = () => {
 
                 <div className="md:w-1/3">
                   <p
-                    className={`text-2xl md:text-7xl font-semibold md:font-bold text-secondary md:offer leading-snug md:-ms-28 ${
+                    className={`text-2xl md:text-7xl font-semibold md:font-bold text-secondary offer !leading-snug md:-ms-28 ${
                       animate ? "fade-in-left" : ""
                     }`}
                   >

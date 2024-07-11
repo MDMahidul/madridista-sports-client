@@ -75,3 +75,59 @@
 .fade-in-right {
   animation: fadeInRight 1s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
+
+@media (max-width: 1200px) {
+  .offer {
+    -webkit-text-stroke: 1.5px #1e4aa1;
+  }
+  
+  .offer-percent {
+    -webkit-text-stroke: 0.75px #fcbf00;
+  }
+
+  .product-name {
+    -webkit-text-stroke: 0.75px #e62644;
+  }
+}
+
+@media (max-width: 992px) {
+  .offer {
+    -webkit-text-stroke: 1px #1e4aa1;
+  }
+
+  .offer-percent {
+    -webkit-text-stroke: 0.5px #fcbf00;
+  }
+
+  .product-name {
+    -webkit-text-stroke: 0.5px #e62644;
+  }
+}
+
+@media (max-width: 768px) {
+  .offer {
+    -webkit-text-stroke: 0.75px #1e4aa1;
+  }
+
+  .offer-percent {
+    -webkit-text-stroke: 0.25px #fcbf00;
+  }
+
+  .product-name {
+    -webkit-text-stroke: 0.25px #e62644;
+  }
+}
+
+@media (max-width: 576px) {
+  .offer {
+    -webkit-text-stroke: 0.5px #1e4aa1;
+  }
+
+  .offer-percent {
+    -webkit-text-stroke: 0.25px #fcbf00;
+  }
+
+  .product-name {
+    -webkit-text-stroke: 0.25px #e62644;
+  }
+}

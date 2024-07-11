@@ -2,12 +2,25 @@ import {  Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import ActiveLink from "../ActiveLink/ActiveLink";
+import { useEffect, useState } from "react";
 
 const NavbarItems = () => {
+  const [navbarHeight, setNavbarHeight] = useState('py-5');
+  /* control nabar bg */
+  useEffect(() => {
+    const handleScroll = () => {
+      setNavbarHeight(window.pageYOffset > 120 ? "py-3" : "py-5");
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <Navbar
-      rounded
-      className="bg-white border-gray-200 dark:bg-gray-500 shadow-md fixed w-full z-20 top-0 start-0 py-4 "
+      className={`bg-white border-gray-200 dark:bg-gray-500 shadow-md fixed w-full z-20 top-0 start-0 transition-all ease-out duration-200 ${navbarHeight}`}
     >
       <Navbar.Brand href="https://flowbite-react.com">
         <Link to="/">
