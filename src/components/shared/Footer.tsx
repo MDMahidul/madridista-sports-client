@@ -50,7 +50,7 @@ const Footer = () => {
                 </p>
                 <p className="flex items-center gap-1">
                   <EnvelopeIcon className="size-5 text-primary" />
-                  mmbmart@inqury.com
+                  madridistasports@inqury.com
                 </p>
                 <p className="">
                   Shop# 18,19,20 Block# D, Level# 01, Ka-244,Progoti sarani,

@@ -12,6 +12,9 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      robotoSlab: ["Roboto Slab", "serif"],
+    },
     container: {
       center: true,
       padding: "2rem",

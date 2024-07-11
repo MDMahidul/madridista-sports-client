@@ -1,0 +1,77 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+.offer {
+  color: #17397f;
+  -webkit-text-fill-color: #fcbf00; /* Will override color (regardless of order) */
+  -webkit-text-stroke: 2px #1e4aa1;
+}
+.offer-percent {
+  color: #e62644;
+  -webkit-text-fill-color: #e62644; /* Will override color (regardless of order) */
+  -webkit-text-stroke: 1px #fcbf00;
+}
+.product-name {
+  color: #fcbf00;
+  -webkit-text-fill-color: #fcbf00; /* Will override color (regardless of order) */
+  -webkit-text-stroke: 1px  #e62644;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 1.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.fade-in-left {
+  animation: fadeInLeft 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.fade-in-right {
+  animation: fadeInRight 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
