@@ -13,7 +13,16 @@ export const baseApi = createApi({
       }),
       providesTags: ["products"],
     }),
+    addProduct: builder.mutation({
+      query: (data) => ({
+        method: "POST",
+        url: "/add-product",
+        body: data,
+      }),
+      invalidatesTags: ["products"],
+    }),
+
   }),
 });
 
-export const {useGetAllProductsQuery}=baseApi;
+export const {useGetAllProductsQuery,useAddProductMutation}=baseApi;

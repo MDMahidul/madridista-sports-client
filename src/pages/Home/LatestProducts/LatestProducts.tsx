@@ -4,6 +4,7 @@ import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import Loader from "@/components/Loader/Loader";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { TProduct } from "@/types/types";
 
 const LatestProducts = () => {
   const { data, isLoading, isError } = useGetAllProductsQuery(undefined);
@@ -30,8 +31,8 @@ const LatestProducts = () => {
       <Container>
         <SectionHeader heading={"The Latest Drop"} />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 md:gap-y-10 ">
-          {products.map((product) => (
-            <FadeInUpAnimation key={product._id}>
+          {products.map((product:TProduct,index:number) => (
+            <FadeInUpAnimation custom={index} key={product._id}>
               <ProductCard product={product}/>
             </FadeInUpAnimation>
           ))}

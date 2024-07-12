@@ -7,6 +7,7 @@ import SectionHeader from '@/components/Headers/SectionsHeader';
 const ContactUs = () => {
     return (
       <div className="md-5 md:mb-10">
+
         <SectionHeader heading={"Contact Us"} />
         <Container>
           <FadeInUpAnimation>

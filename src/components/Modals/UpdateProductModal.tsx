@@ -7,43 +7,40 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { FieldValues, useForm } from "react-hook-form";
-import { useAddProductMutation } from "@/redux/api/baseApi";
 import { toast } from "sonner";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
-const AddProductModal = () => {
-    const [isOpen, setIsOpen] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors },  } = useForm();
-  const [addProduct] = useAddProductMutation();
+const UpdateProductModal = ({ product }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
-    try {
-      await addProduct(data).unwrap();
-      toast.success("Product Added Successfully!");
-      setIsOpen(false);
-      reset();
-    } catch (err: any) {
-      toast.error((err.data?.message || err.message || err)
-      );
-    }
+  
   };
 
-    const handleOpenChange = (open) => {
-      setIsOpen(open);
-      if (!open) {
-        reset();
-      }
-    };
-
+  const handleOpenChange = (open) => {
+    setIsOpen(open);
+    if (!open) {
+      reset();
+    }
+  };
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="primary-button">Add Product</button>
+        <button>
+          <PencilSquareIcon className="size-6 hover:text-primary transition-all duration-200 hover:scale-110" />
+        </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[300px] md:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-primary text-center font-bold">
-            Add Product
+            Update Product
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -56,6 +53,7 @@ const AddProductModal = () => {
                 type="text"
                 id="name"
                 className="add-input-field"
+                defaultValue={product.name}
                 placeholder="Product Title"
                 {...register("name", { required: true })}
               />
@@ -74,6 +72,7 @@ const AddProductModal = () => {
                   type="text"
                   id="brand"
                   className="add-input-field"
+                  defaultValue={product.brand}
                   placeholder="product brand $"
                   {...register("brand", { required: true })}
                 />
@@ -91,6 +90,7 @@ const AddProductModal = () => {
                   type="number"
                   id="quantity"
                   className="add-input-field"
+                  defaultValue={product.quantity}
                   placeholder="Quantity "
                   {...register("quantity", {
                     required: true,
@@ -113,6 +113,7 @@ const AddProductModal = () => {
                   type="number"
                   id="price"
                   className="add-input-field"
+                  defaultValue={product.price}
                   placeholder="price $"
                   {...register("price", {
                     required: true,
@@ -133,9 +134,12 @@ const AddProductModal = () => {
                   type="number"
                   id="off"
                   className="add-input-field"
-                  defaultValue={0}
+                  defaultValue={product.off}
                   placeholder="off percentage %"
-                  {...register("off", { required: false, valueAsNumber: true })}
+                  {...register("off", {
+                    required: false,
+                    valueAsNumber: true,
+                  })}
                 />
                 {/* {errors.off && (
                   <span className=" text-xs text-red-500">
@@ -151,7 +155,7 @@ const AddProductModal = () => {
                 </label>
                 <select
                   className="add-input-field"
-                  defaultValue=""
+                  defaultValue={product.category}
                   name="category"
                   {...register("category", { required: true })}
                 >
@@ -175,6 +179,7 @@ const AddProductModal = () => {
                   type="text"
                   id="ratings"
                   className="add-input-field"
+                  defaultValue={product.ratings}
                   placeholder="Ratings"
                   {...register("ratings", {
                     required: true,
@@ -198,6 +203,7 @@ const AddProductModal = () => {
                 type="url"
                 id="imageLink"
                 className="add-input-field"
+                defaultValue={product.imageLink}
                 placeholder="image link"
                 {...register("imageLink", { required: true })}
               />
@@ -214,7 +220,8 @@ const AddProductModal = () => {
               <textarea
                 id="description"
                 className="add-input-field"
-                placeholder="Write Class Description..."
+                placeholder="Write product des..."
+                defaultValue={product.description}
                 rows="2"
                 {...register("description", { required: true })}
               />
@@ -236,4 +243,4 @@ const AddProductModal = () => {
   );
 };
 
-export default AddProductModal;
+export default UpdateProductModal;

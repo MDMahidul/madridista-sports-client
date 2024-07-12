@@ -3,7 +3,11 @@ import { Rating } from "@smastrom/react-rating";
 import '@smastrom/react-rating/style.css'
 import { TProduct } from "@/types/types";
 
-const ProductCard = ({product}:TProduct) => {
+type TProductCardProps ={
+  product: TProduct;
+}
+
+const ProductCard = ({product}:TProductCardProps) => {
     const {imageLink,off,quantity,name,brand,category,ratings,price}=product;
     return (
       <div>
@@ -14,9 +18,9 @@ const ProductCard = ({product}:TProduct) => {
               src={imageLink}
               alt="product image"
             />
-            <div className="absolute top-4 left-4 bg-tertiary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+            {off > 0 ? <div className="absolute top-4 left-4 bg-tertiary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
               {off}% OFF
-            </div>
+            </div> : ''}
             <div
               className={`absolute top-4 right-4 bg-gray-50 ${
                 quantity > 0 ? 'text-green-500' : 'text-red-500'
