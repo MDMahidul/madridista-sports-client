@@ -7,7 +7,9 @@ import { useGetAllProductsQuery } from "@/redux/api/baseApi";
 import { TProduct } from "@/types/types";
 
 const LatestProducts = () => {
-  const { data, isLoading, isError } = useGetAllProductsQuery(undefined);
+  const { data, isLoading, isError } = useGetAllProductsQuery(undefined, {
+    pollingInterval: 30000,
+  });
   if (isLoading) {
     return <Loader height={"h-[80vh]"} />;
   }

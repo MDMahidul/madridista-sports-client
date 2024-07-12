@@ -4,12 +4,14 @@ import SlideInFromRight from "@/components/Animations/SlideInFromRight";
 import Container from "@/components/Container/Container";
 import Loader from "@/components/Loader/Loader";
 import AddProductModal from "@/components/Modals/AddProductModal";
+import DeleteProductModal from "@/components/Modals/DeleteProductModal";
 import UpdateProductModal from "@/components/Modals/UpdateProductModal";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 const ManageProducts = () => {
-  const { data, isLoading, isError } = useGetAllProductsQuery(undefined);
+  const { data, isLoading, isError } = useGetAllProductsQuery(undefined, {
+    pollingInterval: 30000,
+  });
   if (isLoading) {
     return <Loader height={"h-[80vh]"} />;
   }
@@ -110,10 +112,8 @@ const ManageProducts = () => {
                       </td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex gap-4 justify-center items-center">
-                          <UpdateProductModal product={product}/>
-                          <button>
-                            <TrashIcon className="size-6 hover:text-primary transition-all duration-200 hover:scale-110" />
-                          </button>
+                          <UpdateProductModal product={product} />
+                          <DeleteProductModal id={product._id} />
                         </div>
                       </td>
                     </tr>

@@ -7,21 +7,31 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { FieldValues, useForm } from "react-hook-form";
+import {  useUpdateProductMutation } from "@/redux/api/baseApi";
 import { toast } from "sonner";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 const UpdateProductModal = ({ product }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const id=product._id;
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+  const [updateProduct] = useUpdateProductMutation();
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
-  
+    try {
+      await updateProduct({data,id});
+      toast.success("Product Updated Successfully!");
+      setIsOpen(false);
+      reset();
+    } catch (err: any) {
+      toast.error(err.data?.message || err.message || err);
+    }
   };
 
   const handleOpenChange = (open) => {
