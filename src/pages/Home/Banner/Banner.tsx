@@ -66,8 +66,8 @@ const Banner = () => {
         loop={true}
         onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex)}
       >
-        {sliderData.map((item) => (
-          <SwiperSlide>
+        {sliderData.map((item,index) => (
+          <SwiperSlide key={index}>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent bg-opacity-60 dark:bg-opacity-80"></div>
               <img src={item.image} alt="" />
