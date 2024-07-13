@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import ActiveLink from "../ActiveLink/ActiveLink";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCartItemCount } from "@/redux/features/cartSlice";
 
 const NavbarItems = () => {
+    const cartItemCount = useAppSelector(selectCartItemCount);
+
+
   const [navbarHeight, setNavbarHeight] = useState('py-5');
   /* control nabar bg */
   useEffect(() => {
@@ -51,7 +56,7 @@ const NavbarItems = () => {
             </svg>
 
             <span className="absolute -top-1.5 -right-2 bg-tertiary rounded-full font-medium text-[10px] px-1.5 py-[1px] text-white">
-              0
+              {cartItemCount}
             </span>
           </Link>
         </div>

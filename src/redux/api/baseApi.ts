@@ -1,25 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Define a service using a base URL and expected endpoints
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
   tagTypes: ["products"],
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-  query: ({ category, name } = {}) => {
-    const params = new URLSearchParams();
-    if (category) params.append('category', category);
-    if (name) params.append('name', name);
+      query: ({ category, name } = {}) => {
+        const params = new URLSearchParams();
+        if (category) params.append("category", category);
+        if (name) params.append("name", name);
 
-    return {
-      url: `/all-products?${params.toString()}`,
-      method: 'GET',
-    };
-  },
-  providesTags: ['products'],
-}),
-
+        return {
+          url: `/all-products?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["products"],
+    }),
     getSingleProduct: builder.query({
       query: (id) => ({
         method: "GET",
