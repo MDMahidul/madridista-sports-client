@@ -13,6 +13,13 @@ export const baseApi = createApi({
       }),
       providesTags: ["products"],
     }),
+    getSingleProduct: builder.query({
+      query: (id) => ({
+        method: "GET",
+        url: `/get-product/${id}`,
+      }),
+      providesTags: ["products"],
+    }),
     addProduct: builder.mutation({
       query: (data) => ({
         method: "POST",
@@ -39,4 +46,4 @@ export const baseApi = createApi({
   }),
 });
 
-export const {useGetAllProductsQuery,useAddProductMutation,useUpdateProductMutation,useDeleteProductMutation}=baseApi;
+export const {useGetAllProductsQuery,useAddProductMutation,useUpdateProductMutation,useDeleteProductMutation,useGetSingleProductQuery}=baseApi;

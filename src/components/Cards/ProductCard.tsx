@@ -8,9 +8,9 @@ type TProductCardProps ={
 }
 
 const ProductCard = ({product}:TProductCardProps) => {
-    const {imageLink,off,quantity,name,brand,category,ratings,price}=product;
+    const {imageLink,off,quantity,name,brand,category,ratings,price,_id}=product;
     return (
-      <div>
+      <Link to={`/product/${_id}`}>
         <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700 relative hover:shadow-lg">
           <div className="relative overflow-hidden rounded-t-lg">
             <img
@@ -18,12 +18,16 @@ const ProductCard = ({product}:TProductCardProps) => {
               src={imageLink}
               alt="product image"
             />
-            {off > 0 ? <div className="absolute top-4 left-4 bg-tertiary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-              {off}% OFF
-            </div> : ''}
+            {off > 0 ? (
+              <div className="absolute top-4 left-4 bg-tertiary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                {off}% OFF
+              </div>
+            ) : (
+              ""
+            )}
             <div
               className={`absolute top-4 right-4 bg-gray-50 ${
-                quantity > 0 ? 'text-green-500' : 'text-red-500'
+                quantity > 0 ? "text-green-500" : "text-red-500"
               } text-xs font-bold px-3 py-1 rounded-full shadow-md`}
             >
               {quantity > 0 ? "IN STOCK" : "OUT OF STOCK"}
@@ -61,7 +65,7 @@ const ProductCard = ({product}:TProductCardProps) => {
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     );
 };
 

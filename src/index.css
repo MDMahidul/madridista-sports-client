@@ -77,7 +77,7 @@
   }
 
   .product_card_img {
-    @apply block md:h-96 w-full object-cover object-center  transition-transform transform scale-100 hover:scale-105 duration-300;
+    @apply block  w-9/12 mx-auto object-cover object-center  transition-transform transform scale-100 hover:scale-105 duration-300;
   }
 
   .card_effect {

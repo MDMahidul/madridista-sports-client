@@ -5,6 +5,7 @@ import HomePage from "@/pages/Home/HomePage/HomePage";
 import ManageProducts from "@/pages/ManageProducts/ManageProducts";
 import Cart from "@/pages/Cart/Cart";
 import { createBrowserRouter } from "react-router-dom";
+import SingleProduct from "@/pages/SingleProduct/SingleProduct";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,15 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
+        path:'/product/:id',
+        element:<SingleProduct/>
+      },
+      {
         path:'/all-products',
+        element:<AllProducts/>
+      },
+      {
+        path:'/all-products/category/:category',
         element:<AllProducts/>
       },
       {
