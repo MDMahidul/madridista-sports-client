@@ -1,18 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { toast } from "sonner";
 
 type TCartData = {
   _id: string;
   name: string;
   price: number;
   imageLink: string;
-  quantity: number;
+  pQuantity:number;
+  dQuantity: number;
 };
 
 type TInitialState = {
   items: TCartData[],
 };
-const initialState = {
+const initialState:TInitialState = {
   items: [],
 };
 
@@ -21,22 +23,36 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<TCartData>) => {
-      const { product, quantity } = action.payload;
+      const { product } = action.payload;
       const existingItem = state.items.find((item) => item._id === product._id);
 
       // check if product already exist or not
       if (existingItem) {
-         existingItem.quantity += quantity;
-        
+        existingItem.dQuantity += product.dQuantity;
       } else {
         // Item not in cart already
-        state.items.push({...product,quantity})
+        state.items.push({ ...product });
       }
+    },
+    updateCart: (
+      state,
+      action: PayloadAction<{ id: string; quantity: number }>
+    ) => {
+      const { id, quantity } = action.payload;
+      const existingItem = state.items.find((item) => item._id === id);
+
+      if (existingItem) {
+           existingItem.dQuantity = quantity;
+      }
+    },
+    removeCart: (state, action: PayloadAction<string>) => {
+        const id  = action.payload;
+      state.items = state.items.filter((item) => item._id !== id);
     },
   },
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, updateCart, removeCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
 

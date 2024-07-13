@@ -1,4 +1,4 @@
-import {  Navbar } from "flowbite-react";
+import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import ActiveLink from "../ActiveLink/ActiveLink";
@@ -7,10 +7,9 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectCartItemCount } from "@/redux/features/cartSlice";
 
 const NavbarItems = () => {
-    const cartItemCount = useAppSelector(selectCartItemCount);
+  const cartItemCount = useAppSelector(selectCartItemCount);
 
-
-  const [navbarHeight, setNavbarHeight] = useState('py-5');
+  const [navbarHeight, setNavbarHeight] = useState("py-5");
   /* control nabar bg */
   useEffect(() => {
     const handleScroll = () => {

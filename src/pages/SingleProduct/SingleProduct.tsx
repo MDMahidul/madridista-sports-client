@@ -4,11 +4,7 @@ import { addToCart } from "@/redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
 import {
-  ArrowBigLeft,
   ArrowLeftRight,
-  ArrowRight,
-  ArrowRightIcon,
-  CarrotIcon,
   ChevronRight,
   Loader,
   Lock,
@@ -38,7 +34,7 @@ const SingleProduct = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const { data, isError, isLoading } = useGetSingleProductQuery(id);
+  const { data, isError, isLoading } = useGetSingleProductQuery(id,{pollingInterval:30000});
 
   if (isLoading) {
     return <Loader height={"h-[80vh]"} />;
@@ -76,19 +72,14 @@ const SingleProduct = () => {
       // Dispatch addToCart action
       dispatch(
         addToCart({
-          product: { _id, name, price, imageLink, quantity: pQuantity },
-          quantity: desireQuantity,
+          product: { _id, name, price, imageLink, pQuantity: pQuantity,dQuantity: desireQuantity },
+          
         })
       );
       toast.success("Product added to cart successfully.", { duration: 3000 });
     } catch (error) {
       toast.error("Something went wrong!.", { duration: 3000 });
     }
-    /* if (desireQuantity > pQuantity) {
-       toast.error("Not enough product available.");
-     } else {
-       toast.success("Product added to cart successfully.");
-     } */
   };
 
   return (
