@@ -7,12 +7,19 @@ export const baseApi = createApi({
   tagTypes: ["products"],
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: () => ({
-        method: "GET",
-        url: "/all-products",
-      }),
-      providesTags: ["products"],
-    }),
+  query: ({ category, name } = {}) => {
+    const params = new URLSearchParams();
+    if (category) params.append('category', category);
+    if (name) params.append('name', name);
+
+    return {
+      url: `/all-products?${params.toString()}`,
+      method: 'GET',
+    };
+  },
+  providesTags: ['products'],
+}),
+
     getSingleProduct: builder.query({
       query: (id) => ({
         method: "GET",
@@ -46,4 +53,10 @@ export const baseApi = createApi({
   }),
 });
 
-export const {useGetAllProductsQuery,useAddProductMutation,useUpdateProductMutation,useDeleteProductMutation,useGetSingleProductQuery}=baseApi;
+export const {
+  useGetAllProductsQuery,
+  useAddProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+  useGetSingleProductQuery,
+} = baseApi;

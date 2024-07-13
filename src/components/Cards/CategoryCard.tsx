@@ -15,7 +15,7 @@ const CategoryCard = ({ sport }: CategoryCardProps) => {
   const { name, image, id } = sport;
   return (
     <div>
-      <Link to={`/all-products`}>
+      <Link to={`/all-products/${name}`}>
         <div className="relative max-w-96 h-96 bg-cover bg-center bg-no-repeat hover:shadow-xl transition-transform transform  hover:bg-black hover:bg-opacity-70 group rounded-xl">
           <div
             className="absolute inset-0 w-full h-full rounded-xl bg-cover bg-center bg-no-repeat"
@@ -27,7 +27,7 @@ const CategoryCard = ({ sport }: CategoryCardProps) => {
             className={`absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black to-transparent
               } transition-transform group-hover:opacity-100 rounded-xl`}
           >
-            <h2 className="card_effect text-white text-2xl md:text-3xl font-bold  translate-y-2 group-hover:-translate-y-4">
+            <h2 className="card_effect text-white text-2xl md:text-3xl font-bold  translate-y-2 group-hover:-translate-y-4 capitalize">
               {name}
             </h2>
             <Link

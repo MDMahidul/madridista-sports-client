@@ -8,30 +8,30 @@ const Categories = () => {
   const sports = [
     {
       id: 1,
-      name: "Football",
+      name: "football",
       image: "https://i.ibb.co/3MFF6hk/football-5754946-1280.jpg",
     },
     {
       id: 2,
-      name: "Cricket",
+      name: "cricket",
       image:
         "https://cdn.britannica.com/47/148847-050-C4FB5341/Cricket-bat-ball.jpg",
     },
     {
       id: 3,
-      name: "Tennis",
+      name: "tennis",
       image:
         "https://reviewed-com-res.cloudinary.com/image/fetch/s--UJ2sGByA--/b_white,c_limit,cs_srgb,f_auto,fl_progressive.strip_profile,g_center,q_auto,w_972/https://reviewed-production.s3.amazonaws.com/1597356287543/GettyImages-1171084311.jpg",
     },
     {
       id: 4,
-      name: "Basketball",
+      name: "basketball",
       image:
         "https://facts.net/wp-content/uploads/2024/01/23-best-basketball-history-facts-1705406196.jpg",
     },
     {
       id: 5,
-      name: "Golf",
+      name: "golf",
       image:
         "https://portstephens-australia.com/wp-content/uploads/2022/02/port-stephens-golf.jpg",
     },
