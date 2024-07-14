@@ -7,11 +7,14 @@ import { createBrowserRouter } from "react-router-dom";
 import SingleProduct from "@/pages/SingleProduct/SingleProduct";
 import CartPage from "@/pages/Cart/Cart";
 import CheckOut from "@/pages/CheckOut/CheckOut";
+import SuccessPage from "@/pages/CheckOut/SuccessPage";
+import Error from "@/pages/Error/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement:<Error/>,
     children: [
       {
         index:true,
@@ -44,6 +47,10 @@ const router = createBrowserRouter([
       {
         path:'/checkout',
         element:<CheckOut/>
+      },
+      {
+        path:'/order-confirmation',
+        element:<SuccessPage/>
       },
     ],
   },

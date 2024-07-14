@@ -85,7 +85,7 @@
   } 
 
   .add-input-field {
-    @apply bg-gray-50 border border-secondary text-gray-900 text-sm rounded-lg block w-full p-2.5  focus:outline-none dark:placeholder-gray-400 focus:border-blue-600 focus:ring-blue-600;
+    @apply bg-gray-50 border border-gray-200 shadow text-gray-900 text-sm rounded-lg block w-full p-2.5  focus:outline-none dark:placeholder-gray-400 focus:border-blue-600 focus:ring-blue-600;
   }
   .add-product-label {
     @apply block mb-2 text-sm font-medium text-gray-800 dark:text-white mt-2;

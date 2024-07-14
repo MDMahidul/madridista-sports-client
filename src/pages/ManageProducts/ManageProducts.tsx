@@ -7,6 +7,7 @@ import AddProductModal from "@/components/Modals/AddProductModal";
 import DeleteProductModal from "@/components/Modals/DeleteProductModal";
 import UpdateProductModal from "@/components/Modals/UpdateProductModal";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
   const { data, isLoading, isError } = useGetAllProductsQuery({}, {
@@ -90,9 +91,12 @@ const ManageProducts = () => {
                           alt="Jese image"
                         />
                         <div className="ps-3">
-                          <div className="text-base font-semibold">
+                          <Link
+                            to={`/product/${product._id}`}
+                            className="text-base font-semibold"
+                          >
                             {product.name}
-                          </div>
+                          </Link>
                           <div className="font-normal text-gray-500 capitalize">
                             {product.brand}
                           </div>
