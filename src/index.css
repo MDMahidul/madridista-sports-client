@@ -90,6 +90,9 @@
   .add-input-field {
     @apply bg-gray-50 border border-gray-200 shadow text-gray-900 text-sm rounded-lg block w-full p-2.5  focus:outline-none dark:placeholder-gray-400 focus:border-blue-600 focus:ring-blue-600;
   }
+  .seceondary-input-field{
+    @apply border-0 border-b border-b-secondary focus:ring-0 text-gray-600 text-sm min-w-56 sm:min-w-60 md:min-w-80 
+  }
   .add-product-label {
     @apply block mb-2 text-sm font-medium text-gray-800 dark:text-white mt-2;
   }

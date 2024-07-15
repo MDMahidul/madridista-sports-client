@@ -36,7 +36,7 @@ const ManageProducts = () => {
       <Container>
         <div className="my-5 flex justify-between items-center">
           <SlideInFromLeft>
-            <p className="font-semibold text-xl text-secondary">
+            <p className="font-semibold text-xl text-tertiary">
               <span className="text-primary">Total Products:</span>{" "}
               {products.length}
             </p>

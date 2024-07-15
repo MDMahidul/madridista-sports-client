@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import ProductCard from "@/components/Cards/ProductCard";
@@ -8,19 +8,29 @@ import Loader from "@/components/Loader/Loader";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
 import { TProduct } from "@/types/types";
 import { FieldValues, useForm } from "react-hook-form";
-import { X } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
+import SlideInFromRight from "@/components/Animations/SlideInFromRight";
 
 type TRouteParams = {
   category?: string;
 };
 
-type TErrorResponse ={
+type TErrorResponse = {
   status: number;
   message: string;
-}
+};
 
-const AllProducts= () => {
-  const {register,handleSubmit,reset}=useForm();
+const AllProducts = () => {
+  const { register, handleSubmit, reset } = useForm();
   const { category } = useParams<TRouteParams>();
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
@@ -37,11 +47,10 @@ const AllProducts= () => {
       setSelectedCategory(category.toLowerCase());
       setQueryOptions({ category: category.toLowerCase() });
     } else {
-      setSelectedCategory(undefined)
+      setSelectedCategory(undefined);
       setQueryOptions({});
     }
   }, [category]);
-
 
   // set the name value
   /* const handleNameChange = (e: FormEvent) => {
@@ -49,7 +58,7 @@ const AllProducts= () => {
   }; */
 
   // handle search function by name
-  const handleSearchSubmit = (data:FieldValues) => {
+  const handleSearchSubmit = (data: FieldValues) => {
     setQueryOptions((prevOptions) => ({
       ...prevOptions,
       name: data.name || undefined,
@@ -64,24 +73,24 @@ const AllProducts= () => {
   };
 
   // clare the input filed and refetch the page data
-    const handleClearSearch = () => {
-      setName("");
-      setQueryOptions((prevOptions) => ({
-        ...prevOptions,
-        name: undefined,
-      }));
-      // Update URL to remove search params
-      navigate(`/all-products${selectedCategory ? `/${selectedCategory}` : ""}`);
-      reset()
-    };
+  const handleClearSearch = () => {
+    setName("");
+    setQueryOptions((prevOptions) => ({
+      ...prevOptions,
+      name: undefined,
+    }));
+    // Update URL to remove search params
+    navigate(`/all-products${selectedCategory ? `/${selectedCategory}` : ""}`);
+    reset();
+  };
 
-    // handle sort by price
-   const handleSortByPrice = (sortType: string) => {
-     setQueryOptions((prevOptions) => ({
-       ...prevOptions,
-       sort: sortType,
-     }));
-   };
+  // handle sort by price
+  const handleSortByPrice = (sortType: string) => {
+    setQueryOptions((prevOptions) => ({
+      ...prevOptions,
+      sort: sortType,
+    }));
+  };
 
   const { data, error, isLoading } = useGetAllProductsQuery(queryOptions, {
     pollingInterval: 30000,
@@ -91,8 +100,8 @@ const AllProducts= () => {
     return <Loader height="h-[80vh]" />;
   }
 
-  if (error ) {
-    const errorData=error as TErrorResponse;
+  if (error) {
+    const errorData = error as TErrorResponse;
     if (errorData.status === 404) {
       return (
         <Container>
@@ -123,15 +132,15 @@ const AllProducts= () => {
   const { data: products } = data;
 
   // get the sorted data
-    const sortedProducts = [...products].sort((a: TProduct, b: TProduct) => {
-      if (queryOptions.sort === "price") {
-        return a.price - b.price;
-      } else if (queryOptions.sort === "-price") {
-        return b.price - a.price;
-      } else {
-        return 0;
-      }
-    });
+  const sortedProducts = [...products].sort((a: TProduct, b: TProduct) => {
+    if (queryOptions.sort === "price") {
+      return a.price - b.price;
+    } else if (queryOptions.sort === "-price") {
+      return b.price - a.price;
+    } else {
+      return 0;
+    }
+  });
 
   return (
     <div className="pt-10 md:pt-16">
@@ -139,59 +148,102 @@ const AllProducts= () => {
         heading={category ? `${category} Products` : "All Products"}
       />
       <Container>
-        <FadeInUpAnimation>
-          <div className="flex flex-col md:flex-row justify-center items-center  md:justify-between">
-            <form
-              onSubmit={handleSubmit(handleSearchSubmit)}
-              className="flex flex-col md:flex-row items-center gap-4 mb-5"
-            >
-              <div className="relative">
-                <input
-                  className="bg-gray-50 border border-secondary text-gray-900 rounded-lg block p-2.5 focus:outline-none focus:border-blue-600 focus:ring-blue-600 w-60 "
-                  type="text"
-                  placeholder="Search by name"
-                  {...register("name", { required: true })}
-                />
-                {name && (
-                  <button
-                    type="button"
-                    onClick={handleClearSearch}
-                    className="secondary-button absolute right-5 top-3.5 text-tertiary"
-                  >
-                    <X className="size-4" />
+        <div className="flex  items-center  justify-between">
+          <SlideInFromLeft>
+            <div className="grid grid-cols-2 gap-2">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button className=" flex justify-center items-center gap-2 font-semibold">
+                    <SlidersHorizontal className="size-5 text-tertiary" />{" "}
+                    Filter
                   </button>
-                )}
-              </div>
-              <button type="submit" className="primary-button">
-                Search
-              </button>
-            </form>
-            <div className="mb-5">
-              <select
-                className="bg-gray-50 border border-secondary text-gray-500 rounded-lg block p-2.5 focus:outline-none focus:border-blue-600 focus:ring-blue-600 w-60"
-                value={selectedCategory || ""}
-                onChange={(e) => {
-                  const selected = e.target.value;
-                  setSelectedCategory(selected);
-                  if (selected) {
-                    setQueryOptions({ category: selected });
-                    navigate(`/all-products/${selected}`);
-                  } else {
-                    setSelectedCategory(undefined);
-                    setQueryOptions({});
-                    navigate("/all-products");
-                  }
-                }}
-              >
-                <option value="">Select Category</option>
-                <option value="football">Football</option>
-                <option value="basketball">Basketball</option>
-                <option value="cricket">Cricket</option>
-                <option value="tennis">Tennis</option>
-                <option value="golf">Golf</option>
-                <option value="baseball">Baseball</option>
-              </select>
+                </SheetTrigger>
+                <SheetContent side="left">
+                  <SheetHeader>
+                    <SheetTitle className="text-2xl font-bold text-primary">
+                      Search Product
+                    </SheetTitle>
+                  </SheetHeader>
+                  <SheetDescription>
+                    Search your desired product by name or by categories
+                  </SheetDescription>
+                  <div className=" flex flex-col gap-y-10 mt-10">
+                    <div>
+                      <form onSubmit={handleSubmit(handleSearchSubmit)}>
+                        <div className="relative">
+                          <label className="text-lg font-semibold text-primary">
+                            Search product by category
+                          </label>
+                          <input
+                            className="seceondary-input-field mt-2"
+                            type="text"
+                            placeholder="Product name"
+                            {...register("name", { required: true })}
+                          />
+                          {name && (
+                            <button
+                              type="button"
+                              onClick={handleClearSearch}
+                              className="secondary-button absolute right-7 top-[45px] text-tertiary"
+                            >
+                              <X className="size-4" />
+                            </button>
+                          )}
+                        </div>
+                        <button type="submit" className="primary-button mt-3">
+                          Search
+                        </button>
+                      </form>
+                    </div>
+                    <div>
+                      <label className="text-lg font-semibold text-primary">
+                        Search product by category
+                      </label>
+                      <select
+                        className="seceondary-input-field mt-2"
+                        value={selectedCategory || ""}
+                        onChange={(e) => {
+                          const selected = e.target.value;
+                          setSelectedCategory(selected);
+                          if (selected) {
+                            setQueryOptions({ category: selected });
+                            navigate(`/all-products/${selected}`);
+                          } else {
+                            setSelectedCategory(undefined);
+                            setQueryOptions({});
+                            navigate("/all-products");
+                          }
+                        }}
+                      >
+                        <option value="">Select Category</option>
+                        <option value="football">Football</option>
+                        <option value="basketball">Basketball</option>
+                        <option value="cricket">Cricket</option>
+                        <option value="tennis">Tennis</option>
+                        <option value="golf">Golf</option>
+                        <option value="baseball">Baseball</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-lg font-semibold text-primary">
+                        Sort product by price
+                      </label>
+                      <select
+                        className="seceondary-input-field mt-2"
+                        value={queryOptions.sort || ""}
+                        onChange={(e) => handleSortByPrice(e.target.value)}
+                      >
+                        <option value="">Default</option>
+                        <option value="price">Low to High</option>
+                        <option value="-price">High to Low</option>
+                      </select>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
+          </SlideInFromLeft>
+          <SlideInFromRight>
             <div className="flex flex-col-reverse md:flex-row items-center mb-5 gap-1">
               {/* <label className="mr-2 text-gray-700">Sort by Price:</label> */}
               <select
@@ -204,8 +256,9 @@ const AllProducts= () => {
                 <option value="-price">High to Low</option>
               </select>
             </div>
-          </div>
-        </FadeInUpAnimation>
+          </SlideInFromRight>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 md:gap-y-10">
           {sortedProducts.map((product: TProduct, index: number) => (
             <FadeInUpAnimation custom={index} key={product._id}>
