@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import ProductCard from "@/components/Cards/ProductCard";
@@ -7,13 +7,21 @@ import SectionHeader from "@/components/Headers/SectionsHeader";
 import Loader from "@/components/Loader/Loader";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
 import { TProduct } from "@/types/types";
+import { FieldValues, useForm } from "react-hook-form";
+import { X } from "lucide-react";
 
-type RouteParams = {
+type TRouteParams = {
   category?: string;
 };
 
+type TErrorResponse ={
+  status: number;
+  message: string;
+}
+
 const AllProducts= () => {
-  const { category } = useParams<RouteParams>();
+  const {register,handleSubmit,reset}=useForm();
+  const { category } = useParams<TRouteParams>();
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState(category);
@@ -36,23 +44,23 @@ const AllProducts= () => {
 
 
   // set the name value
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /* const handleNameChange = (e: FormEvent) => {
     setName(e.target.value.toLowerCase());
-  };
+  }; */
 
   // handle search function by name
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSearchSubmit = (data:FieldValues) => {
     setQueryOptions((prevOptions) => ({
       ...prevOptions,
-      name: name || undefined,
+      name: data.name || undefined,
     }));
     // Update URL based on search params
     navigate(
       `/all-products${selectedCategory ? `/${selectedCategory}` : ""}${
-        name ? `?name=${name}` : ""
+        data.name ? `?name=${data.name}` : ""
       }`
     );
+    setName(data.name);
   };
 
   // clare the input filed and refetch the page data
@@ -64,6 +72,7 @@ const AllProducts= () => {
       }));
       // Update URL to remove search params
       navigate(`/all-products${selectedCategory ? `/${selectedCategory}` : ""}`);
+      reset()
     };
 
     // handle sort by price
@@ -82,14 +91,18 @@ const AllProducts= () => {
     return <Loader height="h-[80vh]" />;
   }
 
-  if (error) {
-    if (error.status === 404) {
+  if (error ) {
+    const errorData=error as TErrorResponse;
+    if (errorData.status === 404) {
       return (
         <Container>
           <div className="pt-12 md:pt-24">
             <p className="mt-20 py-40 text-center text-xl font-semibold text-primary">
               No products found for{" "}
-              {selectedCategory ? `${selectedCategory} category` : "the selected criteria"}.
+              {selectedCategory
+                ? `${selectedCategory} category`
+                : "the selected criteria"}
+              .
             </p>
           </div>
         </Container>
@@ -99,7 +112,7 @@ const AllProducts= () => {
         <Container>
           <div className="pt-12 md:pt-24">
             <p className="mt-20 py-40 text-center text-xl font-semibold text-primary">
-              {error.message || "Something went wrong!"}
+              {errorData.message || "Something went wrong!"}
             </p>
           </div>
         </Container>
@@ -129,7 +142,7 @@ const AllProducts= () => {
         <FadeInUpAnimation>
           <div className="flex flex-col md:flex-row justify-center items-center  md:justify-between">
             <form
-              onSubmit={handleSearchSubmit}
+              onSubmit={handleSubmit(handleSearchSubmit)}
               className="flex flex-col md:flex-row items-center gap-4 mb-5"
             >
               <div className="relative">
@@ -137,8 +150,7 @@ const AllProducts= () => {
                   className="bg-gray-50 border border-secondary text-gray-900 rounded-lg block p-2.5 focus:outline-none focus:border-blue-600 focus:ring-blue-600 w-60 "
                   type="text"
                   placeholder="Search by name"
-                  value={name}
-                  onChange={handleNameChange}
+                  {...register("name", { required: true })}
                 />
                 {name && (
                   <button
@@ -181,13 +193,13 @@ const AllProducts= () => {
               </select>
             </div>
             <div className="flex flex-col-reverse md:flex-row items-center mb-5 gap-1">
-              <label className="mr-2 text-gray-700">Sort by Price:</label>
+              {/* <label className="mr-2 text-gray-700">Sort by Price:</label> */}
               <select
-                className="bg-gray-50 border border-secondary text-gray-500 rounded-lg block p-2.5 focus:outline-none focus:border-blue-600 focus:ring-blue-600"
+                className="border-0 border-b border-b-secondary focus:ring-0 font-semibold text-sm"
                 value={queryOptions.sort || ""}
                 onChange={(e) => handleSortByPrice(e.target.value)}
               >
-                <option value="">Default</option>
+                <option value="">Sort by price</option>
                 <option value="price">Low to High</option>
                 <option value="-price">High to Low</option>
               </select>

@@ -9,7 +9,7 @@ const useTimer = (unit: string) => {
 
   const [ref, animate] = useAnimate();
 
-  const intervalRef = useRef(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timeRef = useRef(0);
 
   const [time, setTime] = useState(0);

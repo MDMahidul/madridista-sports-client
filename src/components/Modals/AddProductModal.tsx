@@ -28,7 +28,7 @@ const AddProductModal = () => {
     }
   };
 
-    const handleOpenChange = (open) => {
+    const handleOpenChange = (open:boolean) => {
       setIsOpen(open);
       if (!open) {
         reset();
@@ -151,8 +151,6 @@ const AddProductModal = () => {
                 </label>
                 <select
                   className="add-input-field"
-                  defaultValue=""
-                  name="category"
                   {...register("category", { required: true })}
                 >
                   <option value=""> Select </option>
@@ -160,6 +158,8 @@ const AddProductModal = () => {
                   <option value="cricket"> Cricket </option>
                   <option value="tennis"> Tennis </option>
                   <option value="basketball">Basketball </option>
+                  <option value="baseball">Baseball </option>
+                  <option value="golf">Golf </option>
                 </select>
                 {errors.category && (
                   <span className=" text-xs text-red-500">
@@ -215,7 +215,7 @@ const AddProductModal = () => {
                 id="description"
                 className="add-input-field"
                 placeholder="Write Class Description..."
-                rows="2"
+                rows={2}
                 {...register("description", { required: true })}
               />
               {errors.description && (
@@ -227,7 +227,7 @@ const AddProductModal = () => {
           </div>
           <div className="flex justify-end">
             <button className="w-full primary-button" type="submit">
-              Save changes
+              Add Product
             </button>
           </div>
         </form>

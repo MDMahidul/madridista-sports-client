@@ -1,4 +1,3 @@
-import { ArrowUpCircleIcon, ArrowUpOnSquareIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 
 const ScrollUpBtn = () => {

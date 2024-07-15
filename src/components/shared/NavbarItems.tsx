@@ -62,7 +62,7 @@ const NavbarItems = () => {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <ActiveLink to="/" active>
+        <ActiveLink to="/">
           Home
         </ActiveLink>
         <ActiveLink to="/all-products">All Products</ActiveLink>

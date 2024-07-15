@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TrashIcon } from "@heroicons/react/24/solid";
 import {
   Dialog,
@@ -29,7 +30,7 @@ const DeleteProductModal = ({ id }: TDeleteProp) => {
       toast.error(err.data?.message || err.message || err);
     }
   };
-  const handleOpenChange = (open) => {
+  const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
   };
 

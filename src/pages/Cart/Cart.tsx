@@ -3,7 +3,8 @@ import { Trash2Icon } from "lucide-react";
 import Container from "@/components/Container/Container";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
-  removeCart,
+  clearCart,
+  removeCartItem,
   selectCartItems,
   updateCart,
 } from "@/redux/features/cartSlice";
@@ -14,14 +15,14 @@ import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 
 const CartPage = () => {
   const cartItems = useAppSelector(selectCartItems);
-  const [quantities, setQuantities] = useState({});
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const dispatch = useAppDispatch();
 
   // handle quantity
   useEffect(() => {
     const initialQuantities: { [key: string]: number } = {};
     cartItems.forEach((item) => {
-      initialQuantities[item._id] = item.dQuantity;
+      initialQuantities[item._id as string] = item.dQuantity;
     });
     setQuantities(initialQuantities);
   }, [cartItems]);
@@ -35,7 +36,7 @@ const CartPage = () => {
   };
 
   const decreaseQuantity = (id: string) => {
-    const currentQuantity = quantities[id] || 1;
+    const currentQuantity= quantities[id] || 1;
     if (currentQuantity > 1) {
       updateQuantity(id, currentQuantity - 1);
     }
@@ -43,52 +44,67 @@ const CartPage = () => {
 
   const increaseQuantity = (id: string) => {
     const currentItem = cartItems.find((item) => item._id === id);
-    const pQuantity = currentItem.pQuantity;
+    const pQuantity = currentItem!.pQuantity;
     const currentQuantity = quantities[id] || 1;
     if (currentQuantity >= pQuantity) {
-      toast.error('This exceed the available quantity!');
+      toast.error("This exceed the available quantity!");
       return;
-    } 
+    }
     updateQuantity(id, currentQuantity + 1);
   };
 
-  // Function to calculate total price for a single item
+  //calculate total price for a single item
   const calculateItemPrice = (price: number, quantity: number) => {
     return price * quantity;
   };
 
-  // Function to calculate total price for all items
+  //calculate total price for all items
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     for (const item of cartItems) {
-      const quantity = quantities[item._id] || 1;
-      const itemPrice = calculateItemPrice(item.price, quantity);
-      totalPrice += itemPrice;
+        const itemId = item._id;
+        if (itemId) { 
+            const quantity = quantities[itemId] ?? 1;
+            const itemPrice = calculateItemPrice(item.price, quantity);
+            totalPrice += itemPrice;
+        } else {
+            console.error('Item without _id:', item);
+        }
     }
     return totalPrice;
-  };
+};
 
-  // Function to calculate total VAT
+  //calculate total VAT
   const calculateTotalVAT = () => {
     const totalPrice = calculateTotalPrice();
     const vatRate = 0.15; // 15% VAT
     return totalPrice * vatRate;
   };
 
-  // Function to calculate total price with VAT
+  //calculate total price with VAT
   const calculateTotalPriceWithVAT = () => {
     const totalPrice = calculateTotalPrice();
     const vatRate = 0.15; // 15% VAT
     return totalPrice * (1 + vatRate);
   };
 
-  // Function to handle removing an item from cart (to be implemented)
+  // remove item from cart
   const handleRemoveItem = (id: string) => {
     try {
-      dispatch(removeCart(id));
-      toast.success("Item removed from cart!", { duration: 3000 });
+      dispatch(removeCartItem(id));
+      toast.success("Item removed from cart!", { duration: 2000 });
     } catch (error) {
-      toast.error("Something went wrong!", { duration: 3000 });
+      toast.error("Something went wrong!", { duration: 2000 });
+    }
+  };
+
+  // delete whole cart
+  const handleRemoveCart = () => {
+    try {
+      dispatch(clearCart());
+      toast.success("Cart removed successfully!", { duration: 2000 });
+    } catch (error) {
+      toast.error("Something went wrong!", { duration: 2000 });
     }
   };
 
@@ -132,19 +148,23 @@ const CartPage = () => {
                         <div className="py-2 ">
                           <div className="flex gap-4 md:gap-5 justify-center items-center">
                             <button
-                              onClick={() => decreaseQuantity(item._id)}
+                              onClick={() =>
+                                decreaseQuantity(item._id as string)
+                              }
                               className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"
                             >
                               -
                             </button>
                             <input
                               type="text"
-                              value={quantities[item._id] || item.dQuantity}
+                              value={quantities[item._id as string] || item.dQuantity}
                               readOnly
                               className="w-12 text-center border border-gray-300 rounded"
                             />
                             <button
-                              onClick={() => increaseQuantity(item._id)}
+                              onClick={() =>
+                                increaseQuantity(item._id as string)
+                              }
                               className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"
                             >
                               +
@@ -155,12 +175,12 @@ const CartPage = () => {
                           $
                           {calculateItemPrice(
                             item.price,
-                            quantities[item._id] || item.dQuantity
+                            quantities[item._id as string] || item.dQuantity
                           )}
                         </div>
                         <div className="py-2 ">
                           <button
-                            onClick={() => handleRemoveItem(item._id)}
+                            onClick={() => handleRemoveItem(item._id as string)}
                             className="text-red-500 hover:text-red-700"
                           >
                             <Trash2Icon />
@@ -169,6 +189,17 @@ const CartPage = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+                <div className="text-right mt-10">
+                  <Link className="primary-button me-10" to="/all-products">
+                    Continue Shopping
+                  </Link>
+                  <button
+                    onClick={() => handleRemoveCart()}
+                    className="seceondary-button"
+                  >
+                    Clear Cart
+                  </button>
                 </div>
               </div>
               <div className="w-full md:w-1/3 border rounded-md px-10">

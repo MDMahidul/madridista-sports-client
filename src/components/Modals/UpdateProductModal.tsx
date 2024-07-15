@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import {
   Dialog,
@@ -10,10 +11,15 @@ import { FieldValues, useForm } from "react-hook-form";
 import {  useUpdateProductMutation } from "@/redux/api/baseApi";
 import { toast } from "sonner";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { TProduct } from "@/types/types";
 
-const UpdateProductModal = ({ product }) => {
+type TUpdateModalProp={
+  product:TProduct
+}
+
+const UpdateProductModal = ({ product }: TUpdateModalProp) => {
   const [isOpen, setIsOpen] = useState(false);
-  const id=product._id;
+  const id = product._id;
   const {
     register,
     handleSubmit,
@@ -25,7 +31,7 @@ const UpdateProductModal = ({ product }) => {
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
     try {
-      await updateProduct({data,id});
+      await updateProduct({ data, id });
       toast.success("Product Updated Successfully!");
       setIsOpen(false);
       reset();
@@ -34,7 +40,7 @@ const UpdateProductModal = ({ product }) => {
     }
   };
 
-  const handleOpenChange = (open) => {
+  const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
       reset();
@@ -166,7 +172,6 @@ const UpdateProductModal = ({ product }) => {
                 <select
                   className="add-input-field"
                   defaultValue={product.category}
-                  name="category"
                   {...register("category", { required: true })}
                 >
                   <option value=""> Select </option>
@@ -232,7 +237,7 @@ const UpdateProductModal = ({ product }) => {
                 className="add-input-field"
                 placeholder="Write product des..."
                 defaultValue={product.description}
-                rows="2"
+                rows={2}
                 {...register("description", { required: true })}
               />
               {errors.description && (

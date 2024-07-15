@@ -1,20 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { toast } from "sonner";
 
 type TCartData = {
-  _id: string;
+  _id?: string;
   name: string;
   price: number;
   imageLink: string;
-  pQuantity:number;
+  pQuantity: number;
   dQuantity: number;
 };
 
 type TInitialState = {
-  items: TCartData[],
+  items: TCartData[];
 };
-const initialState:TInitialState = {
+const initialState: TInitialState = {
   items: [],
 };
 
@@ -22,7 +21,7 @@ const cartSlice = createSlice({
   name: "carts",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<TCartData>) => {
+    addToCart: (state, action: PayloadAction<{product: TCartData}>) => {
       const { product } = action.payload;
       const existingItem = state.items.find((item) => item._id === product._id);
 
@@ -42,17 +41,20 @@ const cartSlice = createSlice({
       const existingItem = state.items.find((item) => item._id === id);
 
       if (existingItem) {
-           existingItem.dQuantity = quantity;
+        existingItem.dQuantity = quantity;
       }
     },
-    removeCart: (state, action: PayloadAction<string>) => {
-        const id  = action.payload;
+    removeCartItem: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
       state.items = state.items.filter((item) => item._id !== id);
+    },
+    clearCart: (state) => {
+      state.items = [];
     },
   },
 });
 
-export const { addToCart, updateCart, removeCart } = cartSlice.actions;
+export const { addToCart, updateCart, removeCartItem, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;
 
@@ -60,4 +62,5 @@ export default cartSlice.reducer;
 export const selectCartItems = (state: RootState) => state.carts.items;
 
 // Selector to get the number of items in the cart
-export const selectCartItemCount = (state: RootState) => state.carts.items.length;
+export const selectCartItemCount = (state: RootState) =>
+  state.carts.items.length;

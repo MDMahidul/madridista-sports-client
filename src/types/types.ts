@@ -1,4 +1,5 @@
 export type TProduct = {
+  _id?:string
   name: string;
   brand: string;
   category: string;
@@ -8,5 +9,4 @@ export type TProduct = {
   quantity: number;
   description: string;
   imageLink: string;
-  isDeleted: boolean;
 };

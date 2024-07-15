@@ -9,7 +9,7 @@ type TNavLinkProps={
 const ActiveLink = ({ to, children }: TNavLinkProps) => {
   return (
     <div>
-      <NavLink
+      <NavLink 
         to={to}
         className={({ isActive }) =>
           isActive

@@ -9,7 +9,7 @@ const ContactUs = () => {
         const { register, handleSubmit, reset, formState: { errors },  } = useForm();
 
    const onSubmit = (data: FieldValues) => {
-     
+     console.log(data);
      reset();
    };
 
@@ -70,7 +70,7 @@ const ContactUs = () => {
                   </label>
                   <textarea
                     className="add-input-field"
-                    rows="3"
+                    rows={3}
                     id="message"
                     placeholder="Write your message"
                     {...register("message", { required: true })}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface Sport {
@@ -12,7 +11,7 @@ interface CategoryCardProps {
 }
 
 const CategoryCard = ({ sport }: CategoryCardProps) => {
-  const { name, image, id } = sport;
+  const { name, image } = sport;
   return (
     <div>
       <Link to={`/all-products/${name}`}>

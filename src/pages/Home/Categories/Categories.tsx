@@ -2,7 +2,6 @@ import FadeInUpAnimation from '@/components/Animations/FadeInUpAnimation';
 import CategoryCard from '@/components/Cards/CategoryCard';
 import Container from '@/components/Container/Container';
 import SectionHeader from '@/components/Headers/SectionsHeader';
-import React from 'react';
 
 const Categories = () => {
   const sports = [
