@@ -15,6 +15,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -94,6 +95,9 @@ const SingleProduct = () => {
 
   return (
     <div className="pt-28 md:pt-28">
+      <Helmet>
+        <title>{product.name}</title>
+      </Helmet>
       <Container>
         <SlideInFromLeft>
           <div className="flex items-center mb-10">

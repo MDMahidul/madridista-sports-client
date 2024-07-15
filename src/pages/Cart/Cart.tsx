@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import { Link } from "react-router-dom";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
+import { Helmet } from "react-helmet-async";
 
 const CartPage = () => {
   const cartItems = useAppSelector(selectCartItems);
@@ -110,6 +111,9 @@ const CartPage = () => {
 
   return (
     <div className="pt-10 md:pt-16">
+      <Helmet>
+        <title>Cart Items</title>
+      </Helmet>
       <Container>
         <SectionHeader heading="Shopping Cart" />
         {cartItems.length === 0 ? (
@@ -157,7 +161,9 @@ const CartPage = () => {
                             </button>
                             <input
                               type="text"
-                              value={quantities[item._id as string] || item.dQuantity}
+                              value={
+                                quantities[item._id as string] || item.dQuantity
+                              }
                               readOnly
                               className="w-12 text-center border border-gray-300 rounded"
                             />

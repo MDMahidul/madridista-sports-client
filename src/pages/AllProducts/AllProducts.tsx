@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import SlideInFromRight from "@/components/Animations/SlideInFromRight";
+import { Helmet } from "react-helmet-async";
 
 type TRouteParams = {
   category?: string;
@@ -144,6 +145,9 @@ const AllProducts = () => {
 
   return (
     <div className="pt-10 md:pt-16">
+      <Helmet>
+        <title>{category ? category : 'All Products'}</title>
+      </Helmet>
       <SectionHeader
         heading={category ? `${category} Products` : "All Products"}
       />

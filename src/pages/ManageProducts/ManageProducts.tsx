@@ -7,6 +7,7 @@ import AddProductModal from "@/components/Modals/AddProductModal";
 import DeleteProductModal from "@/components/Modals/DeleteProductModal";
 import UpdateProductModal from "@/components/Modals/UpdateProductModal";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
@@ -33,6 +34,9 @@ const ManageProducts = () => {
   console.log(products);
   return (
     <div className="pt-20 md:pt-24 ">
+      <Helmet>
+        <title>Manage Products</title>
+      </Helmet>
       <Container>
         <div className="my-5 flex justify-between items-center">
           <SlideInFromLeft>

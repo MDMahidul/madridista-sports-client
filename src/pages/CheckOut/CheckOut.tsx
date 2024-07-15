@@ -13,6 +13,7 @@ import { TruckIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import { useAddOrderMutation } from "@/redux/api/baseApi";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
+import { Helmet } from "react-helmet-async";
 
 const CheckOut = () => {
   const {
@@ -99,6 +100,9 @@ const CheckOut = () => {
 
   return (
     <div className="pt-10 md:pt-16">
+      <Helmet>
+        <title>Checkout</title>
+      </Helmet>
       <Container>
         <SectionHeader heading="Checkout Page" />
         <FadeInUpAnimation>

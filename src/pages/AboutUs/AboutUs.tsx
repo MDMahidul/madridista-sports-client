@@ -5,10 +5,14 @@ import StaffCard from "@/components/Cards/StaffCard";
 import staffData from "./staff.json";
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import { ClockIcon, MapPinIcon, PhoneIcon } from "@heroicons/react/24/solid";
+import { Helmet } from "react-helmet-async";
 
 const AboutUs = () => {
   return (
     <div className="pt-24 md:pt-28 ">
+      <Helmet>
+        <title>About Us</title>
+      </Helmet>
       <div className="dark:bg-gray-700  pb-10 lg:pb-20" id="about">
         <Container>
           <div className="grid grid-cols-1 gap-10">

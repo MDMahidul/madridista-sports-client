@@ -2,11 +2,15 @@ import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import Container from "@/components/Container/Container";
 import ShiftingCountdown from "@/components/Countdown/Countdown";
 import SectionHeader from "@/components/Headers/SectionsHeader";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 const SuccessPage = () => {
     return (
       <div className="pt-10 md:pt-16">
+        <Helmet>
+          <title>Order Placed</title>
+        </Helmet>
         <Container>
           <SectionHeader heading="Congratulations!!!" />
           <FadeInUpAnimation>
