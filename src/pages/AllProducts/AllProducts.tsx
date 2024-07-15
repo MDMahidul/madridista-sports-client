@@ -176,7 +176,7 @@ const AllProducts = () => {
                       <form onSubmit={handleSubmit(handleSearchSubmit)}>
                         <div className="relative">
                           <label className="text-lg font-semibold text-primary">
-                            Search product by category
+                            Search product by name
                           </label>
                           <input
                             className="seceondary-input-field mt-2"

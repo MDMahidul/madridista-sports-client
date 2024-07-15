@@ -106,8 +106,8 @@ const CheckOut = () => {
       <Container>
         <SectionHeader heading="Checkout Page" />
         <FadeInUpAnimation>
-          <div className="flex justify-around">
-            <div className="w-1/2">
+          <div className="flex justify-around flex-col md:flex-row">
+            <div className="md:w-1/2">
               <div className="flex justify-center items-center bg-primary text-white p-4 gap-3 text-xl font-semibold mb-7">
                 <TruckIcon className="size-8" /> Shipping Address
               </div>
@@ -186,11 +186,11 @@ const CheckOut = () => {
                   <button
                     type="submit"
                     onClick={handleSubmit(onSubmit)}
-                    className="bg-blue-800 px-4 md:px-8 py-1.5 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-primary transform transition-all duration-200 hover:scale-105 w-52"
+                    className="bg-blue-800 px-4 md:px-8 py-1.5 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-primary transform transition-all duration-200 hover:scale-105 md:w-52"
                   >
                     Cash On Delivery
                   </button>
-                  <button className="bg-tertiary px-4 md:px-8 py-1.5 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-red-600 transform transition-all duration-200 hover:scale-105 w-52">
+                  <button className="bg-tertiary px-4 md:px-8 py-1.5 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-red-600 transform transition-all duration-200 hover:scale-105 md:w-52">
                     <span className="flex justify-center items-center gap-2">
                       <CircleDollarSign className="size-4" /> Stripe
                     </span>
@@ -199,7 +199,7 @@ const CheckOut = () => {
               </form>
             </div>
 
-            <div className="w-1/3">
+            <div className="md:w-1/3">
               <div className="w-full border rounded-md px-10">
                 <p className="text-2xl font-bold text-gray-600 text-center py-8">
                   Order summary
