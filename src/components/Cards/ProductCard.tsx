@@ -9,6 +9,9 @@ type TProductCardProps ={
 
 const ProductCard = ({product}:TProductCardProps) => {
     const {imageLink,off,quantity,name,brand,category,ratings,price,_id}=product;
+
+    const prevPrice = price + Math.round(price * (off / 100));
+
     return (
       <Link to={`/product/${_id}`}>
         <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700 relative hover:shadow-lg">
@@ -34,7 +37,7 @@ const ProductCard = ({product}:TProductCardProps) => {
             </div>
           </div>
           <div className="px-5 pb-5">
-            <h5 className="text-lg md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+            <h5 className="mt-4 text-lg md:text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
               {name}
             </h5>
             <p className="text-sm md:text-base font-medium text-gray-600 capitalize">
@@ -56,8 +59,8 @@ const ProductCard = ({product}:TProductCardProps) => {
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                ${price}
+              <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                ${price} {off ? <span className="text-gray-400 font-medium text-base md:text-lg line-through ms-2">${prevPrice}</span> :''}
               </span>
               <a href="#" className="primary-button">
                 View Details

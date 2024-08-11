@@ -8,7 +8,8 @@ const Categories = () => {
     {
       id: 1,
       name: "football",
-      image: "https://i.ibb.co/3MFF6hk/football-5754946-1280.jpg",
+      image:
+        "https://cdn.britannica.com/51/190751-131-B431C216/soccer-ball-goal.jpg",
     },
     {
       id: 2,

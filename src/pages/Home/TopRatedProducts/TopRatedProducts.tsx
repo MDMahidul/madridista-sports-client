@@ -6,15 +6,15 @@ import Loader from "@/components/Loader/Loader";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
 import { TQueryParams } from "@/types/global";
 import { TProduct } from "@/types/types";
-import {  useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const LatestProducts = () => {
+const TopRatedProducts = () => {
   const [params, setParams] = useState<TQueryParams[]>([]);
   const { data, isLoading, isError } = useGetAllProductsQuery(
     [
-      { name: "sort", value: "-createdAt" },
-      { name: "limit", value: 6 },
+        { name: "sort", value: "-ratings" },
+        { name: "limit", value: 6 },
       ...params,
     ],
     {
@@ -43,7 +43,7 @@ const LatestProducts = () => {
   return (
     <div className="md-5 md:mb-10">
       <Container>
-        <SectionHeader heading={"The Latest Drop"} />
+        <SectionHeader heading={"Top Rated Products"} />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 md:gap-y-10 ">
           {products.map((product: TProduct, index: number) => (
             <FadeInUpAnimation custom={index} key={product._id}>
@@ -64,4 +64,4 @@ const LatestProducts = () => {
   );
 };
 
-export default LatestProducts;
+export default TopRatedProducts;

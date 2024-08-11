@@ -66,7 +66,7 @@ const Banner = () => {
         loop={true}
         onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex)}
       >
-        {sliderData.map((item,index) => (
+        {sliderData.map((item, index) => (
           <SwiperSlide key={index}>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent bg-opacity-60 dark:bg-opacity-80"></div>
@@ -92,9 +92,9 @@ const Banner = () => {
                   </p>
                   <Link
                     to="/all-products"
-                    className="bg-blue-800 px-3 md:px-8 py-1 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-primary transform transition-all duration-200 hover:scale-105"
+                    className="primary-button"
                   >
-                    See Details
+                    <button> Explore More</button>
                   </Link>
                 </div>
 

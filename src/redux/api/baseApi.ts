@@ -1,27 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TQueryParams } from "@/types/global";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface TGetAllProductsQueryParams {
+/* interface TGetAllProductsQueryParams {
   category?: string;
   name?: string;
-}
+} */
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://madridista-sports-server.vercel.app/api",
+    baseUrl: "http://localhost:5000/api",
   }),
   tagTypes: ["products"],
   endpoints: (builder) => ({
-    getAllProducts: builder.query<any, TGetAllProductsQueryParams>({
-      query: ({ category, name } = {}) => {
+    getAllProducts: builder.query({
+      query: (args) => {
         const params = new URLSearchParams();
-        if (category) params.append("category", category);
-        if (name) params.append("name", name);
-
+        
+        if (args) {
+          args.forEach((item: TQueryParams) => {
+            params.append(item.name, item.value as string);
+          });
+        }
         return {
-          url: `/product/all-products?${params.toString()}`,
+          url: `/product/all-products`,
           method: "GET",
+          params:params
         };
       },
       providesTags: ["products"],

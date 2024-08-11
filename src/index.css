@@ -75,6 +75,8 @@
   .primary-button{
     @apply bg-blue-800 px-4 md:px-8 py-1.5 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-primary transform transition-all duration-200 hover:scale-105 disabled:bg-gray-500 disabled:hover:scale-100
   }
+  
+
   .seceondary-button{
     @apply bg-tertiary px-4 md:px-8 py-1.5 md:py-3 text-white text-sm md:text-[15px] font-semibold rounded-md hover:bg-red-700 transform transition-all duration-200 hover:scale-105 disabled:bg-gray-500 disabled:hover:scale-100
   }

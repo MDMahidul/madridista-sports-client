@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, ChangeEvent } from "react";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import ProductCard from "@/components/Cards/ProductCard";
 import Container from "@/components/Container/Container";
@@ -20,10 +19,15 @@ import {
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import SlideInFromRight from "@/components/Animations/SlideInFromRight";
 import { Helmet } from "react-helmet-async";
-
-type TRouteParams = {
-  category?: string;
-};
+import { TQueryParams } from "@/types/global";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type TErrorResponse = {
   status: number;
@@ -32,70 +36,18 @@ type TErrorResponse = {
 
 const AllProducts = () => {
   const { register, handleSubmit, reset } = useForm();
-  const { category } = useParams<TRouteParams>();
-  const navigate = useNavigate();
+  const [params, setParams] = useState<TQueryParams[]>([]);
   const [name, setName] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState(category);
-  const [queryOptions, setQueryOptions] = useState<{
-    category?: string;
-    name?: string;
-    sort?: string;
-  }>({});
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
+  const [page, setPage] = useState(1);
 
-  // reload the page based on the category data
-  useEffect(() => {
-    if (category) {
-      setSelectedCategory(category.toLowerCase());
-      setQueryOptions({ category: category.toLowerCase() });
-    } else {
-      setSelectedCategory(undefined);
-      setQueryOptions({});
+  const { data, error, isLoading } = useGetAllProductsQuery(
+    [{ name: "page", value: page }, ...params],
+    {
+      pollingInterval: 30000,
     }
-  }, [category]);
-
-  // set the name value
-  /* const handleNameChange = (e: FormEvent) => {
-    setName(e.target.value.toLowerCase());
-  }; */
-
-  // handle search function by name
-  const handleSearchSubmit = (data: FieldValues) => {
-    setQueryOptions((prevOptions) => ({
-      ...prevOptions,
-      name: data.name || undefined,
-    }));
-    // Update URL based on search params
-    navigate(
-      `/all-products${selectedCategory ? `/${selectedCategory}` : ""}${
-        data.name ? `?name=${data.name}` : ""
-      }`
-    );
-    setName(data.name);
-  };
-
-  // clare the input filed and refetch the page data
-  const handleClearSearch = () => {
-    setName("");
-    setQueryOptions((prevOptions) => ({
-      ...prevOptions,
-      name: undefined,
-    }));
-    // Update URL to remove search params
-    navigate(`/all-products${selectedCategory ? `/${selectedCategory}` : ""}`);
-    reset();
-  };
-
-  // handle sort by price
-  const handleSortByPrice = (sortType: string) => {
-    setQueryOptions((prevOptions) => ({
-      ...prevOptions,
-      sort: sortType,
-    }));
-  };
-
-  const { data, error, isLoading } = useGetAllProductsQuery(queryOptions, {
-    pollingInterval: 30000,
-  });
+  );
 
   if (isLoading) {
     return <Loader height="h-[80vh]" />;
@@ -130,27 +82,69 @@ const AllProducts = () => {
     }
   }
 
-  const { data: products } = data;
+  /* handle pagination */
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
-  // get the sorted data
-  const sortedProducts = [...products].sort((a: TProduct, b: TProduct) => {
-    if (queryOptions.sort === "price") {
-      return a.price - b.price;
-    } else if (queryOptions.sort === "-price") {
-      return b.price - a.price;
-    } else {
-      return 0;
-    }
-  });
+  /* handle search by category */
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selected = event.target.value;
+    setSelectedCategory(selected);
+
+    const updatedParams = selected
+      ? [{ name: "category", value: selected }]
+      : [];
+
+    setParams(updatedParams);
+    setPage(1);
+  };
+
+  /* handle search function by name */
+  const handleSearchByName = (data: FieldValues) => {
+    const searchTerm = data.name;
+    setName(searchTerm);
+
+    const updatedParams = [
+      { name: "category", value: selectedCategory },
+      { name: "searchTerm", value: searchTerm },
+      { name: "sort", value: sortOrder },
+    ];
+
+    setParams(updatedParams.filter((param) => param.value));
+    setPage(1);
+  };
+
+  /* handle sort by price */
+  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedSortOrder = event.target.value;
+    setSortOrder(selectedSortOrder);
+    const updatedParams = [
+      { name: "category", value: selectedCategory },
+      { name: "searchTerm", value: name },
+      { name: "sort", value: selectedSortOrder },
+    ];
+
+    setParams(updatedParams.filter((param) => param.value));
+    setPage(1);
+  };
+
+  /* clare the input filed and refetch the page data */
+  const handleClearSearch = () => {
+    setName("");
+    setPage(1);
+    setParams([]);
+    reset();
+  };
+
+  const { data: products } = data;
 
   return (
     <div className="pt-10 md:pt-16">
       <Helmet>
-        <title>{category ? category : 'All Products'}</title>
+        <title>All Products</title>
       </Helmet>
-      <SectionHeader
-        heading={category ? `${category} Products` : "All Products"}
-      />
+      <SectionHeader heading={"All Products"} />
       <Container>
         <div className="flex  items-center  justify-between">
           <SlideInFromLeft>
@@ -173,7 +167,7 @@ const AllProducts = () => {
                   </SheetDescription>
                   <div className=" flex flex-col gap-y-10 mt-10">
                     <div>
-                      <form onSubmit={handleSubmit(handleSearchSubmit)}>
+                      <form onSubmit={handleSubmit(handleSearchByName)}>
                         <div className="relative">
                           <label className="text-lg font-semibold text-primary">
                             Search product by name
@@ -206,18 +200,7 @@ const AllProducts = () => {
                       <select
                         className="seceondary-input-field mt-2"
                         value={selectedCategory || ""}
-                        onChange={(e) => {
-                          const selected = e.target.value;
-                          setSelectedCategory(selected);
-                          if (selected) {
-                            setQueryOptions({ category: selected });
-                            navigate(`/all-products/${selected}`);
-                          } else {
-                            setSelectedCategory(undefined);
-                            setQueryOptions({});
-                            navigate("/all-products");
-                          }
-                        }}
+                        onChange={handleCategoryChange}
                       >
                         <option value="">Select Category</option>
                         <option value="football">Football</option>
@@ -234,8 +217,8 @@ const AllProducts = () => {
                       </label>
                       <select
                         className="seceondary-input-field mt-2"
-                        value={queryOptions.sort || ""}
-                        onChange={(e) => handleSortByPrice(e.target.value)}
+                        value={sortOrder || ""}
+                        onChange={handleSortChange}
                       >
                         <option value="">Default</option>
                         <option value="price">Low to High</option>
@@ -252,8 +235,8 @@ const AllProducts = () => {
               {/* <label className="mr-2 text-gray-700">Sort by Price:</label> */}
               <select
                 className="border-0 border-b border-b-secondary focus:ring-0 font-semibold text-sm"
-                value={queryOptions.sort || ""}
-                onChange={(e) => handleSortByPrice(e.target.value)}
+                value={sortOrder || ""}
+                onChange={handleSortChange}
               >
                 <option value="">Sort by price</option>
                 <option value="price">Low to High</option>
@@ -264,13 +247,50 @@ const AllProducts = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 md:gap-y-10">
-          {sortedProducts.map((product: TProduct, index: number) => (
+          {products.map((product: TProduct, index: number) => (
             <FadeInUpAnimation custom={index} key={product._id}>
               <ProductCard product={product} />
             </FadeInUpAnimation>
           ))}
         </div>
       </Container>
+      <FadeInUpAnimation>
+        <div className="my-10">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={() => handlePageChange(page - 1)}
+                  className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+              {Array.from({ length: data.meta.totalPage }, (_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    href="#"
+                    onClick={() => handlePageChange(index + 1)}
+                    isActive={page === index + 1}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={() => handlePageChange(page + 1)}
+                  className={
+                    page === data.meta.totalPage
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </FadeInUpAnimation>
     </div>
   );
 };

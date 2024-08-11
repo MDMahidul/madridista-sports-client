@@ -1,4 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import SlideInFromRight from "@/components/Animations/SlideInFromRight";
 import Container from "@/components/Container/Container";
@@ -7,13 +17,21 @@ import AddProductModal from "@/components/Modals/AddProductModal";
 import DeleteProductModal from "@/components/Modals/DeleteProductModal";
 import UpdateProductModal from "@/components/Modals/UpdateProductModal";
 import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { TQueryParams } from "@/types/global";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
-  const { data, isLoading, isError } = useGetAllProductsQuery({}, {
-    pollingInterval: 30000,
-  });
+  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError } = useGetAllProductsQuery(
+    [{ name: "page", value: page }, ...params],
+    {
+      pollingInterval: 30000,
+    }
+  );
+
   if (isLoading) {
     return <Loader height={"h-[80vh]"} />;
   }
@@ -30,8 +48,12 @@ const ManageProducts = () => {
     );
   }
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   const { data: products } = data;
-  console.log(products);
+  console.log(data.meta.total);
   return (
     <div className="pt-20 md:pt-24 ">
       <Helmet>
@@ -42,7 +64,7 @@ const ManageProducts = () => {
           <SlideInFromLeft>
             <p className="font-semibold text-xl text-tertiary">
               <span className="text-primary">Total Products:</span>{" "}
-              {products.length}
+              {data.meta.total}
             </p>
           </SlideInFromLeft>
           <SlideInFromRight>
@@ -50,7 +72,7 @@ const ManageProducts = () => {
           </SlideInFromRight>
         </div>
         <div>
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-x-auto sm:rounded-lg">
             <FadeInUpAnimation>
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2">
@@ -84,7 +106,9 @@ const ManageProducts = () => {
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                       key={product._id}
                     >
-                      <td className="w-4 p-4 font-semibold">{index + 1}</td>
+                      <td className="w-4 p-4 font-semibold">
+                        {(page - 1) * data.meta.limit + index + 1}
+                      </td>
                       <th
                         scope="row"
                         className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
@@ -131,6 +155,45 @@ const ManageProducts = () => {
             </FadeInUpAnimation>
           </div>
         </div>
+        <FadeInUpAnimation>
+          <div className="my-10">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={() => handlePageChange(page - 1)}
+                    className={
+                      page === 1 ? "pointer-events-none opacity-50" : ""
+                    }
+                  />
+                </PaginationItem>
+                {Array.from({ length: data.meta.totalPage }, (_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      href="#"
+                      onClick={() => handlePageChange(index + 1)}
+                      isActive={page === index + 1}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={() => handlePageChange(page + 1)}
+                    className={
+                      page === data.meta.totalPage
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </FadeInUpAnimation>
       </Container>
     </div>
   );

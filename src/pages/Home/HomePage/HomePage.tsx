@@ -5,6 +5,7 @@ import Partners from '../Partners/Partners';
 import Categories from '../Categories/Categories';
 import Reviews from '../Reviews/Reviews';
 import { Helmet } from 'react-helmet-async';
+import TopRatedProducts from '../TopRatedProducts/TopRatedProducts';
 
 const HomePage = () => {
     return (
@@ -15,6 +16,7 @@ const HomePage = () => {
         <Banner />
         <LatestProducts />
         <Categories />
+        <TopRatedProducts/>
         <ContactUs />
         <Reviews />
         <Partners />

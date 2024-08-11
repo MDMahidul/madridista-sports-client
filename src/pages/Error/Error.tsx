@@ -9,7 +9,7 @@ const Error = () => {
   const error:any = useRouteError();
   console.log(error.data);
   return (
-    <Container>
+    <>
       <Helmet>
         <title>Errors</title>
       </Helmet>
@@ -29,7 +29,7 @@ const Error = () => {
           </Link>
         </div>
       </div>
-    </Container>
+    </>
   );
 };
 
