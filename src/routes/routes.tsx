@@ -9,6 +9,8 @@ import CheckOut from "@/pages/CheckOut/CheckOut";
 import SuccessPage from "@/pages/CheckOut/SuccessPage";
 import Error from "@/pages/Error/Error";
 import AllProducts from "@/pages/AllProducts/AllProducts";
+import SignInPage from "@/pages/SignIn&SingnUp/SignInPage";
+import SignUpPage from "@/pages/SignIn&SingnUp/SignUpPage";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path:'/signin',
+    element:<SignInPage/>
+  },
+  {
+    path:'/signup',
+    element:<SignUpPage/>
+  }
 ]);
 
 export default router;

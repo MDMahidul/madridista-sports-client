@@ -4,7 +4,7 @@ import ProductCard from "@/components/Cards/ProductCard";
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import Loader from "@/components/Loader/Loader";
-import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { TProduct } from "@/types/types";
 import { FieldValues, useForm } from "react-hook-form";
 import { SlidersHorizontal, X } from "lucide-react";

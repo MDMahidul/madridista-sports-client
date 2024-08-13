@@ -3,7 +3,7 @@ import ProductCard from "@/components/Cards/ProductCard";
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import Loader from "@/components/Loader/Loader";
-import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { TQueryParams } from "@/types/global";
 import { TProduct } from "@/types/types";
 import { useState } from "react";
@@ -13,8 +13,8 @@ const TopRatedProducts = () => {
   const [params, setParams] = useState<TQueryParams[]>([]);
   const { data, isLoading, isError } = useGetAllProductsQuery(
     [
-        { name: "sort", value: "-ratings" },
-        { name: "limit", value: 6 },
+      { name: "sort", value: "-ratings" },
+      { name: "limit", value: 6 },
       ...params,
     ],
     {

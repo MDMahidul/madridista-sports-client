@@ -1,8 +1,8 @@
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import Container from "@/components/Container/Container";
-import { useGetSingleProductQuery } from "@/redux/api/baseApi";
-import { addToCart } from "@/redux/features/cartSlice";
+import { useGetSingleProductQuery } from "@/redux/features/products/products.api";
+import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
 import {
@@ -23,7 +23,7 @@ import RelatedProduct from "./RelatedProduct";
 const SingleProduct = () => {
   // call the reducers
   const dispatch = useAppDispatch();
- // const { carts } = useAppSelector((state) => state.carts);
+  // const { carts } = useAppSelector((state) => state.carts);
   const [quantity, setQuantity] = useState(1);
 
   const decreaseQuantity = () => {
@@ -66,8 +66,8 @@ const SingleProduct = () => {
       return;
     }
     try {
-      const { _id, name, price, imageLink, quantity: pQuantity,off } = product;
-  
+      const { _id, name, price, imageLink, quantity: pQuantity, off } = product;
+
       const desireQuantity = Math.min(quantity, pQuantity);
 
       // check quantity
@@ -296,7 +296,7 @@ const SingleProduct = () => {
           </FadeInUpAnimation>
         </Container>
       </div>
-      <RelatedProduct category={product.category} limit={3}/>
+      <RelatedProduct category={product.category} limit={3} />
     </>
   );
 };

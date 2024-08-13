@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
-import { clearCart, selectCartItems } from "@/redux/features/cartSlice";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { CircleDollarSign } from "lucide-react";
 import { useState } from "react";
@@ -11,9 +11,10 @@ import { ArrowLeftRight, Lock, Phone, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { TruckIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
-import { useAddOrderMutation } from "@/redux/api/baseApi";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import { Helmet } from "react-helmet-async";
+import { useAddOrderMutation } from "@/redux/features/products/products.api";
+import { clearCart, selectCartItems } from "@/redux/features/cart/cartSlice";
 
 const CheckOut = () => {
   const {

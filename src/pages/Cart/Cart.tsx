@@ -7,7 +7,7 @@ import {
   removeCartItem,
   selectCartItems,
   updateCart,
-} from "@/redux/features/cartSlice";
+} from "@/redux/features/cart/cartSlice";
 import { toast } from "sonner";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import { Link } from "react-router-dom";

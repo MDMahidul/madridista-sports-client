@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import ProductCard from "@/components/Cards/ProductCard";
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import Loader from "@/components/Loader/Loader";
-import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { TQueryParams } from "@/types/global";
 import { TProduct } from "@/types/types";
-import {  useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const LatestProducts = () => {

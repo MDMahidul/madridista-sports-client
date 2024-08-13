@@ -1,20 +1,20 @@
-import FadeInUpAnimation from '@/components/Animations/FadeInUpAnimation';
-import ProductCard from '@/components/Cards/ProductCard';
-import Container from '@/components/Container/Container';
-import SectionHeader from '@/components/Headers/SectionsHeader';
-import { useGetAllProductsQuery } from '@/redux/api/baseApi';
-import { TQueryParams } from '@/types/global';
-import { TProduct } from '@/types/types';
-import { Loader } from 'lucide-react';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
+import ProductCard from "@/components/Cards/ProductCard";
+import Container from "@/components/Container/Container";
+import SectionHeader from "@/components/Headers/SectionsHeader";
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { TQueryParams } from "@/types/global";
+import { TProduct } from "@/types/types";
+import { Loader } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-type RelatedProductProps= {
+type RelatedProductProps = {
   category: string;
-  limit?: number; 
-}
+  limit?: number;
+};
 
-const RelatedProduct: React.FC<RelatedProductProps> = ({ category,limit }) => {
+const RelatedProduct: React.FC<RelatedProductProps> = ({ category, limit }) => {
   const [params, setParams] = useState<TQueryParams[]>([]);
   const { data, isLoading, isError } = useGetAllProductsQuery(
     [

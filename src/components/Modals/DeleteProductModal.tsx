@@ -8,16 +8,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useDeleteProductMutation } from "@/redux/api/baseApi";
+import { useDeleteProductMutation } from "@/redux/features/products/products.api";
 import { toast } from "sonner";
 import { useState } from "react";
 
-type TDeleteProp={
-  id:string
-}
+type TDeleteProp = {
+  id: string;
+};
 
 const DeleteProductModal = ({ id }: TDeleteProp) => {
-
   const [deleteProduct] = useDeleteProductMutation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +24,7 @@ const DeleteProductModal = ({ id }: TDeleteProp) => {
     try {
       deleteProduct(id);
       setIsOpen(false);
-      toast.success('Product deleted successfully!')
+      toast.success("Product deleted successfully!");
     } catch (err: any) {
       toast.error(err.data?.message || err.message || err);
     }

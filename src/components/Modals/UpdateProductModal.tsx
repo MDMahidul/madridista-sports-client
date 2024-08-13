@@ -8,14 +8,14 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { FieldValues, useForm } from "react-hook-form";
-import {  useUpdateProductMutation } from "@/redux/api/baseApi";
+import { useUpdateProductMutation } from "@/redux/features/products/products.api";
 import { toast } from "sonner";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { TProduct } from "@/types/types";
 
-type TUpdateModalProp={
-  product:TProduct
-}
+type TUpdateModalProp = {
+  product: TProduct;
+};
 
 const UpdateProductModal = ({ product }: TUpdateModalProp) => {
   const [isOpen, setIsOpen] = useState(false);

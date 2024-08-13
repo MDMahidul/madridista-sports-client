@@ -1,81 +1,78 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TQueryParams } from "@/types/global";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { TResponse } from "@/types/global";
+import {
+  BaseQueryApi,
+  BaseQueryFn,
+  createApi,
+  DefinitionType,
+  FetchArgs,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
+import { RootState } from "../store";
+import { toast } from "sonner";
+import { logOut, setUser } from "../features/auth/authSlice";
 
-/* interface TGetAllProductsQueryParams {
-  category?: string;
-  name?: string;
-} */
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://localhost:5000/api",
+  /* to set cookies data */
+  credentials: "include",
+  /* send token through header to server */
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as RootState).auth.token;
+    if (token) {
+      headers.set("authorization", `${token}`);
+    }
 
-export const baseApi = createApi({
-  reducerPath: "baseApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
-  }),
-  tagTypes: ["products"],
-  endpoints: (builder) => ({
-    getAllProducts: builder.query({
-      query: (args) => {
-        const params = new URLSearchParams();
-        
-        if (args) {
-          args.forEach((item: TQueryParams) => {
-            params.append(item.name, item.value as string);
-          });
-        }
-        return {
-          url: `/product/all-products`,
-          method: "GET",
-          params:params
-        };
-      },
-      providesTags: ["products"],
-    }),
-    getSingleProduct: builder.query({
-      query: (id) => ({
-        method: "GET",
-        url: `/product/get-product/${id}`,
-      }),
-      providesTags: ["products"],
-    }),
-    addProduct: builder.mutation({
-      query: (data) => ({
-        method: "POST",
-        url: "/product/add-product",
-        body: data,
-      }),
-      invalidatesTags: ["products"],
-    }),
-    updateProduct: builder.mutation({
-      query: ({ data, id }) => ({
-        method: "PUT",
-        url: `/product/update-product/${id}`,
-        body: data,
-      }),
-      invalidatesTags: ["products"],
-    }),
-    deleteProduct: builder.mutation({
-      query: (id) => ({
-        method: "DELETE",
-        url: `/product/delete-product/${id}`,
-      }),
-      invalidatesTags: ["products"],
-    }),
-    addOrder: builder.mutation({
-      query: (data) => ({
-        method: "POST",
-        url: "/order/add-order",
-        body: data,
-      }),
-    }),
-  }),
+    return headers;
+  },
 });
 
-export const {
-  useGetAllProductsQuery,
-  useAddProductMutation,
-  useUpdateProductMutation,
-  useDeleteProductMutation,
-  useGetSingleProductQuery,
-  useAddOrderMutation,
-} = baseApi;
+/* create custom baseQuery */
+const baseQueryWithRefreshToken: BaseQueryFn<
+  FetchArgs,
+  BaseQueryApi,
+  DefinitionType
+> = async (args, api, extraOptions): Promise<any> => {
+  let result = (await baseQuery(args, api, extraOptions)) as TResponse;
+
+  if (result?.error?.status === 404) {
+    toast.error(result?.error?.data.message, {
+      duration: 2000,
+      style: { padding: "10px" },
+    });
+  }
+  if (result?.error?.status === 500) {
+    toast.error(result?.error?.data.message, {
+      duration: 2000,
+      style: { padding: "10px" },
+    });
+  }
+
+  if (result?.error?.status === 401) {
+    const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json();
+
+    /* if refreshtoken expired */
+    if (data?.data?.accessToken) {
+      const user = (api.getState() as RootState).auth.user;
+
+      /* set user data fter server resend the access token */
+      api.dispatch(setUser({ user, token: data.data.accessToken }));
+
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logOut());
+    }
+  }
+  return result;
+};
+
+export const baseApi = createApi({
+  tagTypes : ["products"],
+  reducerPath: "baseApi",
+  baseQuery: baseQueryWithRefreshToken,
+  endpoints: () => ({}),
+});

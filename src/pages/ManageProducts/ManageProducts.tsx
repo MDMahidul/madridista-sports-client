@@ -16,7 +16,7 @@ import Loader from "@/components/Loader/Loader";
 import AddProductModal from "@/components/Modals/AddProductModal";
 import DeleteProductModal from "@/components/Modals/DeleteProductModal";
 import UpdateProductModal from "@/components/Modals/UpdateProductModal";
-import { useGetAllProductsQuery } from "@/redux/api/baseApi";
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { TQueryParams } from "@/types/global";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";

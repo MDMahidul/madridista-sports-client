@@ -4,7 +4,8 @@ import logo from "../../assets/logo.png";
 import ActiveLink from "../ActiveLink/ActiveLink";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
-import { selectCartItemCount } from "@/redux/features/cartSlice";
+import { selectCartItemCount } from "@/redux/features/cart/cartSlice";
+import DropdownMenu from "../DropdownMenu/DropdownMenu";
 
 const NavbarItems = () => {
   const cartItemCount = useAppSelector(selectCartItemCount);
@@ -58,6 +59,7 @@ const NavbarItems = () => {
               {cartItemCount}
             </span>
           </Link>
+          <DropdownMenu/>
         </div>
         <Navbar.Toggle />
       </div>

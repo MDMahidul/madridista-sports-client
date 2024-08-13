@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import {
   Dialog,
@@ -7,12 +8,17 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { FieldValues, useForm } from "react-hook-form";
-import { useAddProductMutation } from "@/redux/api/baseApi";
+import { useAddProductMutation } from "@/redux/features/products/products.api";
 import { toast } from "sonner";
 
 const AddProductModal = () => {
-    const [isOpen, setIsOpen] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors },  } = useForm();
+  const [isOpen, setIsOpen] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const [addProduct] = useAddProductMutation();
 
   const onSubmit = async (data: FieldValues) => {
@@ -23,17 +29,16 @@ const AddProductModal = () => {
       setIsOpen(false);
       reset();
     } catch (err: any) {
-      toast.error((err.data?.message || err.message || err)
-      );
+      toast.error(err.data?.message || err.message || err);
     }
   };
 
-    const handleOpenChange = (open:boolean) => {
-      setIsOpen(open);
-      if (!open) {
-        reset();
-      }
-    };
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      reset();
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
