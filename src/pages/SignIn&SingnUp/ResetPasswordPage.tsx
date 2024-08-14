@@ -1,43 +1,52 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { FieldValues, useForm } from "react-hook-form";
-import { useSigninMutation } from "@/redux/features/auth/auth.api";
+import { useResetpasswordMutation } from "@/redux/features/auth/auth.api";
 import { ImSpinner9 } from "react-icons/im";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/hooks";
 import { verifyToken } from "@/utils/verifyToken";
-import { setUser, TUser } from "@/redux/features/auth/authSlice";
 
-const SignInPage = () => {
-   const [signin, { isLoading }] = useSigninMutation();
-   const navigate = useNavigate();
-   const dispatch=useAppDispatch();
+const ResetPasswordPage = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [resetpassword, { isLoading }] = useResetpasswordMutation();
 
   const {
     register,
-    handleSubmit,reset,
+    handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const handleSingIn =async (data: FieldValues) => {
-    const userInfo={
-      email:data.email,
-      password:data.password,
-    }
-    try {
-      const result = await signin(userInfo).unwrap();
-      const user = verifyToken(result.data.accessToken) as TUser;
-      console.log(user);
-
-      dispatch(setUser({user:user,token:result.data.accessToken}))
-
-      reset();
-      toast.success("Sign In successfully!", {
+  const handleResetPassword = async (data: FieldValues) => {
+    if (data.password !== data.confirmPassword) {
+      toast.error("Confirm sassword does not match", {
         duration: 2000,
         style: { padding: "10px" },
       });
-      navigate("/");
+      return;
+    }
+
+    const token = searchParams.get("token");
+    const email = searchParams.get("email");
+    const newPassword = data.password;
+
+    try {
+      const result = await resetpassword({
+        email,
+        newPassword,
+        token,
+      }).unwrap();
+      console.log(result);
+      reset();
+      toast.success("Password updated successfully !", {
+        duration: 2000,
+        style: { padding: "10px" },
+      });
+      navigate("/signin");
     } catch (error: any) {
       console.log(error.data.errorSources[0].message);
       toast.error(error.data?.errorSources[0]?.message, {
@@ -58,29 +67,14 @@ const SignInPage = () => {
             Welcome to madridista sports!
           </h2>
           <h4 className="text-lg md:text-2xl font-semibold  text-primary">
-            Sign in to your account
+            Submit email and new password
           </h4>
         </div>
         <div>
           <form
             className="px-10 space-y-5"
-            onSubmit={handleSubmit(handleSingIn)}
+            onSubmit={handleSubmit(handleResetPassword)}
           >
-            <div className="relative">
-              <input
-                type="text"
-                id="email"
-                className="block add-input-field appearance-none  peer"
-                placeholder=" "
-                {...register("email", { required: true })}
-              />
-              <label htmlFor="email" className="floating-label">
-                Email
-              </label>
-            </div>
-            {errors.email && (
-              <span className="text-xs text-red-500">Email is required *</span>
-            )}
             <div className="relative">
               <input
                 type="password"
@@ -98,15 +92,29 @@ const SignInPage = () => {
                 Password is required *
               </span>
             )}
-            <div className="text-sm font-medium text-right text-blue-600">
-              <Link to="/forget-password">Forget password?</Link>
+            <div className="relative">
+              <input
+                type="password"
+                id="confirmPassword"
+                className="block add-input-field appearance-none  peer"
+                placeholder=" "
+                {...register("confirmPassword", { required: true })}
+              />
+              <label htmlFor="confirmPassword" className="floating-label">
+                Confirm password
+              </label>
             </div>
+            {errors.confirmPassword && (
+              <span className="text-xs text-red-500">
+                Confirm password is required *
+              </span>
+            )}
             <div>
               <button className="primary-button w-full">
                 {isLoading ? (
                   <ImSpinner9 className="m-auto animate-spin" size={24} />
                 ) : (
-                  "Sign In"
+                  "Submit"
                 )}
               </button>
             </div>
@@ -125,4 +133,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default ResetPasswordPage;

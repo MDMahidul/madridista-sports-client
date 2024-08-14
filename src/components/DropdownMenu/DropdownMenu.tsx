@@ -1,20 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { MdDashboard } from "react-icons/md";
 import {
-  FiTrash,
-  FiShare,
-  FiPlusSquare,
-} from "react-icons/fi";
-import {
-  FaSignInAlt
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUserAlt,
+  FaRegBell,
+  FaUserPlus,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { IconType } from "react-icons";
 import MenuOptions from "./MenuOptions";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const DropdownMenu = () => {
   const [open, setOpen] = useState(false);
-
+  const user = useAppSelector(selectCurrentUser);
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logOut());
+  };
   return (
     <div className="flex items-center justify-center bg-white">
       <motion.div animate={open ? "open" : "closed"} className="relative">
@@ -47,19 +54,53 @@ const DropdownMenu = () => {
           style={{ originY: "top", translateX: "-50%" }}
           className="flex flex-col gap-2 p-2 rounded-lg bg-white  absolute top-[150%] left-[60%] w-36 overflow-hidden shadow-xl"
         >
-          <Link to="/signin">
-            <MenuOptions setOpen={setOpen} Icon={FaSignInAlt} text="Sign In" />
-          </Link>
-          <MenuOptions setOpen={setOpen} Icon={FiPlusSquare} text="Duplicate" />
-          <MenuOptions setOpen={setOpen} Icon={FiShare} text="Share" />
-          <MenuOptions setOpen={setOpen} Icon={FiTrash} text="Remove" />
+          {!user && (
+            <>
+              <Link to="/signin">
+                <MenuOptions
+                  setOpen={setOpen}
+                  Icon={FaSignInAlt}
+                  text="Sign In"
+                />
+              </Link>
+              <Link to="/signup">
+                <MenuOptions
+                  setOpen={setOpen}
+                  Icon={FaUserPlus}
+                  text="Sign Up"
+                />
+              </Link>
+            </>
+          )}
+          {user?.role === "superAdmin" || user?.role === "admin" ? (
+            <MenuOptions
+              setOpen={setOpen}
+              Icon={MdDashboard}
+              text="Dashboard"
+            />
+          ) : null}
+          {user && (
+            <>
+              <MenuOptions setOpen={setOpen} Icon={FaUserAlt} text="Profile" />
+              <MenuOptions
+                setOpen={setOpen}
+                Icon={FaRegBell}
+                text="Notification"
+              />
+              <button onClick={handleLogout}>
+                <MenuOptions
+                  setOpen={setOpen}
+                  Icon={FaSignOutAlt}
+                  text="Sign Out"
+                />
+              </button>
+            </>
+          )}
         </motion.ul>
       </motion.div>
     </div>
   );
 };
-
-
 
 export default DropdownMenu;
 
@@ -84,4 +125,3 @@ const iconVariants = {
   open: { rotate: 180 },
   closed: { rotate: 0 },
 };
-

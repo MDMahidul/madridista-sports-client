@@ -11,6 +11,8 @@ import Error from "@/pages/Error/Error";
 import AllProducts from "@/pages/AllProducts/AllProducts";
 import SignInPage from "@/pages/SignIn&SingnUp/SignInPage";
 import SignUpPage from "@/pages/SignIn&SingnUp/SignUpPage";
+import ForgetPasswordPage from "@/pages/SignIn&SingnUp/ForgetPasswordPage";
+import ResetPasswordPage from "@/pages/SignIn&SingnUp/ResetPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -63,7 +65,15 @@ const router = createBrowserRouter([
   {
     path:'/signup',
     element:<SignUpPage/>
-  }
+  },
+  {
+    path:'/forget-password',
+    element:<ForgetPasswordPage/>
+  },
+  {
+    path:'/reset-password',
+    element:<ResetPasswordPage/>
+  },
 ]);
 
 export default router;
