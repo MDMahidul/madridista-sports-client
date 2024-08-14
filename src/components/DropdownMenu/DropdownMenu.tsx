@@ -73,11 +73,13 @@ const DropdownMenu = () => {
             </>
           )}
           {user?.role === "superAdmin" || user?.role === "admin" ? (
-            <MenuOptions
-              setOpen={setOpen}
-              Icon={MdDashboard}
-              text="Dashboard"
-            />
+            <Link to="/dashboard">
+              <MenuOptions
+                setOpen={setOpen}
+                Icon={MdDashboard}
+                text="Dashboard"
+              />
+            </Link>
           ) : null}
           {user && (
             <>

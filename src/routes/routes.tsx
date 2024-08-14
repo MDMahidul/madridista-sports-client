@@ -13,66 +13,90 @@ import SignInPage from "@/pages/SignIn&SingnUp/SignInPage";
 import SignUpPage from "@/pages/SignIn&SingnUp/SignUpPage";
 import ForgetPasswordPage from "@/pages/SignIn&SingnUp/ForgetPasswordPage";
 import ResetPasswordPage from "@/pages/SignIn&SingnUp/ResetPasswordPage";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import Dashboard from "@/pages/Dashboard/Dashboard";
+import UnauthorizedPage from "@/pages/Error/UnauthorizedPage";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement:<Error/>,
+    errorElement: <Error />,
     children: [
       {
-        index:true,
+        index: true,
         element: <HomePage />,
       },
       {
-        path:'/product/:id',
-        element:<SingleProduct/>
+        path: "/product/:id",
+        element: <SingleProduct />,
       },
-     /*  {
+      /*  {
         path:'/all-products',
         element:<AllProducts2/>
       }, */
       {
-        path:'/all-products',
-        element:<AllProducts/>
+        path: "/all-products",
+        element: <AllProducts />,
       },
       {
-        path:'/manage-products',
-        element:<ManageProducts/>
+        path: "/manage-products",
+        element: <ManageProducts />,
       },
       {
-        path:'/about-us',
-        element:<AboutUs/>
+        path: "/about-us",
+        element: <AboutUs />,
       },
       {
-        path:'/cart',
-        element:<CartPage/>
+        path: "/cart",
+        element: <CartPage />,
       },
       {
-        path:'/checkout',
-        element:<CheckOut/>
+        path: "/checkout",
+        element: <CheckOut />,
       },
       {
-        path:'/order-confirmation',
-        element:<SuccessPage/>
+        path: "/order-confirmation",
+        element: <SuccessPage />,
       },
     ],
   },
   {
-    path:'/signin',
-    element:<SignInPage/>
+    path: "/dashboard",
+    element: (
+      <PrivateRoute roles={["admin", "superAdmin"]}>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+            <Dashboard />
+        ),
+      },
+    ],
   },
   {
-    path:'/signup',
-    element:<SignUpPage/>
+    path: "/signin",
+    element: <SignInPage />,
   },
   {
-    path:'/forget-password',
-    element:<ForgetPasswordPage/>
+    path: "/signup",
+    element: <SignUpPage />,
   },
   {
-    path:'/reset-password',
-    element:<ResetPasswordPage/>
+    path: "/forget-password",
+    element: <ForgetPasswordPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: "/unauthorized",
+    element: <UnauthorizedPage />,
   },
 ]);
 

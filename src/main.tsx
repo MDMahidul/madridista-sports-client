@@ -10,7 +10,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
     <HelmetProvider>
       <Provider store={store}>
         <Toaster richColors position="top-center" />
@@ -19,5 +18,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </PersistGate>
       </Provider>
     </HelmetProvider>
-  </React.StrictMode>
 );

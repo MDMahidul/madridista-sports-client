@@ -1,7 +1,9 @@
+import React from 'react';
+
 const Dashboard = () => {
     return (
         <div>
-            <p>Admin Dashboard</p>
+            <h1>Dashboard</h1>
         </div>
     );
 };
