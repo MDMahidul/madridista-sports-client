@@ -2,14 +2,21 @@ import { Link } from "react-router-dom";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { TProduct } from "@/types/types";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  addWishList,
+  removeWishList,
+  SelectedWishList,
+} from "@/redux/features/wishList/wishListslice";
 
 type TProductCardProps = {
   product: TProduct;
 };
 
 const ProductCard = ({ product }: TProductCardProps) => {
+  const dispatch = useAppDispatch();
   const {
     imageLink,
     off,
@@ -22,8 +29,31 @@ const ProductCard = ({ product }: TProductCardProps) => {
     _id,
   } = product;
 
-  const showToast = () => {
-    toast.success("clicked!");
+  const wishListItems = useAppSelector(SelectedWishList);
+  const isInWishList = wishListItems.some((item) => item._id === _id);
+
+  const handleWishList = () => {
+    try {
+      if (isInWishList) {
+        dispatch(removeWishList({ productId: _id! }));
+        toast.success("Product removed from wishlist!", { duration: 2000 });
+      } else {
+        dispatch(
+          addWishList({
+            product: {
+              _id,
+              name,
+              price,
+              imageLink,
+              quantity,
+            },
+          })
+        );
+        toast.success("Product added to wishlist !", { duration: 2000 });
+      }
+    } catch (error) {
+      toast.error("Something went wrong !", { duration: 2000 });
+    }
   };
   const prevPrice = price + Math.round(price * (off / 100));
 
@@ -52,11 +82,11 @@ const ProductCard = ({ product }: TProductCardProps) => {
           </div>
         </Link>
         <div
-          className={`absolute top-3.5 right-4  text-gray-400 hover:text-tertiary transition-all duration-200
-             text-xl`}
+          className={`absolute top-3.5 right-4   hover:text-tertiary transition-all duration-200
+             text-2xl ${isInWishList ? "text-tertiary" : "text-gray-400"} `}
         >
-          <button onClick={() => showToast()}>
-            <FaRegHeart />
+          <button onClick={() => handleWishList()}>
+            {isInWishList ? <FaHeart /> : <FaRegHeart />}
           </button>
         </div>
       </div>

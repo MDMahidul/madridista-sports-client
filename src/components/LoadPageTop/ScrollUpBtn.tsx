@@ -27,7 +27,7 @@ const ScrollUpBtn = () => {
     <div>
       {isVisible && (
         <button
-          className="fixed bottom-8 right-8  text-white bg-primary p-2 text-xl  rounded-full  transition-all hover:scale-95 z-50"
+          className="fixed bottom-8 right-4  text-white bg-primary p-2 text-xl  rounded-full  transition-all hover:scale-95 z-50"
           onClick={handleScrollTop}
         >
           <svg

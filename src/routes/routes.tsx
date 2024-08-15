@@ -17,6 +17,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import UnauthorizedPage from "@/pages/Error/UnauthorizedPage";
 import PrivateRoute from "./PrivateRoute";
+import WishListPage from "@/pages/WishListPage/WishListPage";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/wishlist",
+        element: <WishListPage />,
       },
       {
         path: "/checkout",

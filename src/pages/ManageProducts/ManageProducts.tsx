@@ -14,15 +14,19 @@ import SlideInFromRight from "@/components/Animations/SlideInFromRight";
 import Container from "@/components/Container/Container";
 import Loader from "@/components/Loader/Loader";
 import AddProductModal from "@/components/Modals/AddProductModal";
-import DeleteProductModal from "@/components/Modals/DeleteProductModal";
+import DeleteModal from "@/components/Modals/DeleteModal";
 import UpdateProductModal from "@/components/Modals/UpdateProductModal";
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery,
+} from "@/redux/features/products/products.api";
 import { TQueryParams } from "@/types/global";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
+  const [deleteProduct] = useDeleteProductMutation();
   const [params, setParams] = useState<TQueryParams[]>([]);
   const [page, setPage] = useState(1);
   const { data, isLoading, isError } = useGetAllProductsQuery(
@@ -47,6 +51,10 @@ const ManageProducts = () => {
       </Container>
     );
   }
+
+  const handleDeleteProduct = async (id: string) => {
+    await deleteProduct(id);
+  };
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -145,7 +153,10 @@ const ManageProducts = () => {
                       <td className="px-6 py-4 text-center">
                         <div className="flex gap-4 justify-center items-center">
                           <UpdateProductModal product={product} />
-                          <DeleteProductModal id={product._id} />
+                          <DeleteModal
+                            onDelete={() => handleDeleteProduct(product._id)}
+                            entityName="product"
+                          />
                         </div>
                       </td>
                     </tr>
