@@ -25,19 +25,19 @@ const NavbarItems = () => {
   }, []);
   return (
     <Navbar
-      className={`bg-white border-gray-200 dark:bg-gray-500 shadow-md fixed w-full z-20 top-0 start-0 transition-all ease-out duration-200 ${navbarHeight}`}
+      className={`bg-white border-gray-200 dark:bg-gray-500 shadow-md fixed w-full z-20 top-0 start-0 transition-all ease-out duration-200 ${navbarHeight} -px-20`}
     >
-      <Navbar.Brand href="https://flowbite-react.com">
+      <Navbar.Brand >
         <Link to="/">
           <div className="flex justify-center items-center gap-x-2">
-            <img src={logo} className="w-8 md:w-[41px]" alt="Flowbite Logo" />
-            <p className="md:text-[23px] font-bold text-primary">
+            <img src={logo} className="w-8 md:w-[41px]" alt="madridita sports" />
+            <p className="md:text-[23px] font-bold text-primary hidden sm:block">
               Madridista Sports
             </p>
           </div>
         </Link>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+      <div className="flex md:order-2 ">
         <div className="flex md:gap-7 space-x-4 md:space-x-0 rtl:space-x-reverse mr-5">
           <Link to="/cart" className="relative mt-2 md:mt-[1px]">
             <svg

@@ -53,7 +53,7 @@ const ManageProducts = () => {
   };
 
   const { data: products } = data;
-  console.log(data.meta.total);
+  console.log(data.meta);
   return (
     <div className="pt-20 md:pt-24 ">
       <Helmet>

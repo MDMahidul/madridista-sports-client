@@ -14,7 +14,7 @@ const CategoryCard = ({ sport }: CategoryCardProps) => {
   const { name, image } = sport;
   return (
     <div>
-      <Link to={`/all-products/${name}`}>
+      <Link to={`/all-products?category=${name}`}>
         <div className="relative max-w-96 h-96 bg-cover bg-center bg-no-repeat hover:shadow-xl transition-transform transform  hover:bg-black hover:bg-opacity-70 group rounded-xl">
           <div
             className="absolute inset-0 w-full h-full rounded-xl bg-cover bg-center bg-no-repeat"

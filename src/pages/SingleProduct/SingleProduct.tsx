@@ -7,7 +7,6 @@ import { useAppDispatch } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
 import {
   ArrowLeftRight,
-  ChevronRight,
   Loader,
   Lock,
   Phone,
@@ -16,9 +15,10 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import RelatedProduct from "./RelatedProduct";
+import BreadcrumbComponent from "@/components/Breadcrumb/Breadcrumb";
 
 const SingleProduct = () => {
   // call the reducers
@@ -66,7 +66,7 @@ const SingleProduct = () => {
       return;
     }
     try {
-      const { _id, name, price, imageLink, quantity: pQuantity, off } = product;
+      const { _id, name, price, imageLink, quantity: pQuantity } = product;
 
       const desireQuantity = Math.min(quantity, pQuantity);
 
@@ -94,6 +94,19 @@ const SingleProduct = () => {
     }
   };
 
+  const breadCrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/all-products" },
+    {
+      label: `${product.category}`,
+      href: `/all-products?category=${product.category}`,
+    },
+    {
+      label: `${product.name}`,
+      isCurrentPage: true,
+    },
+  ];
+
   return (
     <>
       <div className="pt-28 md:pt-28">
@@ -102,20 +115,7 @@ const SingleProduct = () => {
         </Helmet>
         <Container>
           <SlideInFromLeft>
-            <div className="flex items-center mb-10">
-              <Link to="/all-products" className="text-primary font-semibold">
-                Product
-              </Link>
-              <ChevronRight className="size-[20px] text-primary" />
-              <Link
-                to={`/all-products/${product.category}`}
-                className="capitalize text-primary font-semibold"
-              >
-                {product.category}
-              </Link>
-              <ChevronRight className="size-[20px] text-primary" />
-              <p className="text-primary font-semibold">{product.name}</p>
-            </div>
+            <BreadcrumbComponent items={breadCrumbItems} />
           </SlideInFromLeft>
           <div>
             {product ? (

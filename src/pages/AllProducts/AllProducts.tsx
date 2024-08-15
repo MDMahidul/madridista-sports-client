@@ -28,6 +28,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type TErrorResponse = {
   status: number;
@@ -42,12 +43,21 @@ const AllProducts = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [page, setPage] = useState(1);
 
-  const { data, error, isLoading } = useGetAllProductsQuery(
-    [{ name: "page", value: page }, ...params],
-    {
-      pollingInterval: 30000,
-    }
-  );
+  /* handle search params */
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const category = searchParams.get("category") || "";
+  const queryParams = [{ name: "page", value: page }, ...params];
+
+  /* if there is any category search param then set the search parameter other wise set remove the search params */
+  if (category) {
+    queryParams.push({ name: "category", value: category });
+  }
+  
+  const { data, error, isLoading } = useGetAllProductsQuery(queryParams, {
+    pollingInterval: 30000,
+  });
 
   if (isLoading) {
     return <Loader height="h-[80vh]" />;
@@ -98,6 +108,13 @@ const AllProducts = () => {
 
     setParams(updatedParams);
     setPage(1);
+
+    // Update the URL
+    if (selected) {
+      navigate(`/all-products?category=${selected}`);
+    } else {
+      navigate(`/all-products`);
+    }
   };
 
   /* handle search function by name */

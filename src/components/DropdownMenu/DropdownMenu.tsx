@@ -29,7 +29,7 @@ const DropdownMenu = () => {
           onClick={() => setOpen((pv) => !pv)}
           className="flex items-center rounded-md text-primary  transition-colors"
         >
-          <span className="font-medium text-sm mt-2 md:mt-[1px]">
+          <span className="font-medium text-sm  md:mt-[1px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
