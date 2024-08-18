@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import Container from "@/components/Container/Container";
 import { useGetSingleProductQuery } from "@/redux/features/products/products.api";
-import { addToCart } from "@/redux/features/cart/cartSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
 import {
   ArrowLeftRight,
@@ -19,11 +19,13 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import RelatedProduct from "./RelatedProduct";
 import BreadcrumbComponent from "@/components/Breadcrumb/Breadcrumb";
+import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
+import LoadingError from "../Error/LoadingError";
 
 const SingleProduct = () => {
-  // call the reducers
-  const dispatch = useAppDispatch();
-  // const { carts } = useAppSelector((state) => state.carts);
+  const [addToCart] = useAddToCartMutation();
+  const token = useAppSelector(useCurrentToken);
   const [quantity, setQuantity] = useState(1);
 
   const decreaseQuantity = () => {
@@ -37,60 +39,52 @@ const SingleProduct = () => {
   };
 
   const { id } = useParams<{ id: string }>();
-
   const { data, isError, isLoading } = useGetSingleProductQuery(id, {
     pollingInterval: 30000,
   });
-
   if (isLoading) {
-    return <Loader height={"h-[80vh]"} />;
+    return <Loader height="h-[80vh]" />;
   }
-
   if (isError || !data) {
-    return (
-      <Container>
-        <div className="pt-12 md:pt-24">
-          <p className="mt-20 py-40 text-center text-xl font-semibold text-primary">
-            Something went wrong!
-          </p>
-        </div>
-      </Container>
-    );
+    <LoadingError />;
   }
 
   const { data: product } = data;
-  console.log(data);
+  //console.log(data);
 
-  const handleAddToCart = () => {
-    if (!data) {
+  const handleAddToCart = async () => {
+    /* check if there is any user or product*/
+    if (!token) {
+      toast.error("Please sign in first !", { duration: 2000 });
+      return;
+    } else if (!data) {
       return;
     }
-    try {
-      const { _id, name, price, imageLink, quantity: pQuantity } = product;
 
+    try {
+      const { _id, quantity: pQuantity } = product;
       const desireQuantity = Math.min(quantity, pQuantity);
 
       // check quantity
       if (quantity > pQuantity) {
-        toast.error("Not enough product available.", { duration: 2000 });
+        toast.error("Not enough product available !", { duration: 2000 });
         return;
       }
-      // Dispatch addToCart action
-      dispatch(
-        addToCart({
-          product: {
-            _id,
-            name,
-            price,
-            imageLink,
-            pQuantity: pQuantity,
-            dQuantity: desireQuantity,
-          },
-        })
-      );
-      toast.success("Product added to cart successfully.", { duration: 2000 });
+
+      const cartData = {
+        items: [{ product: _id, quantity: desireQuantity }],
+      };
+
+      await addToCart({
+        token: token,
+        items: cartData.items,
+      }).unwrap();
+
+      toast.success("Product added to cart successfully.", {
+        duration: 2000,
+      });
     } catch (error) {
-      toast.error("Something went wrong!.", { duration: 2000 });
+      toast.error((error as any)?.data?.message, { duration: 2000 });
     }
   };
 
@@ -199,7 +193,7 @@ const SingleProduct = () => {
                         </tr>
                       </tbody>
                     </table>
-                    <div className="flex items-end gap-8  my-2 lg:my-4 xl:my-8 ">
+                    <div className="flex items-end gap-8  my-2 lg:my-4  ">
                       <p className="text-red-500 dark:text-white text-lg md:text-3xl font-semibold md:font-bold">
                         ${product.price}
                       </p>
@@ -218,10 +212,10 @@ const SingleProduct = () => {
                       <p className="dark:text-white">{product.description}</p>
                     </div>
                     <div>
-                      <p className="text-lg md:text-xl font-semibold mt-3 lg:mt-5 text-gray-600 dark:text-white">
+                      <p className="text-lg md:text-xl font-semibold mt-3 text-gray-600 dark:text-white">
                         Select Quantity
                       </p>
-                      <div className="flex gap-4 md:gap-5 my-4 lg:my-6">
+                      <div className="flex gap-4 md:gap-5 my-4 lg:my-5">
                         <button
                           onClick={decreaseQuantity}
                           className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"

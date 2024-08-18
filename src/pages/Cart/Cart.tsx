@@ -1,57 +1,64 @@
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Trash2Icon } from "lucide-react";
 import Container from "@/components/Container/Container";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {
-  clearCart,
-  removeCartItem,
-  selectCartItems,
-  updateCart,
-} from "@/redux/features/cart/cartSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { toast } from "sonner";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import { Link } from "react-router-dom";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import { Helmet } from "react-helmet-async";
+import {
+  useClearCartItemMutation,
+  useGetCartQuery,
+  useRemoveCartItemMutation,
+  useUpdateCartMutation,
+} from "@/redux/features/cart/cart.api";
+import Loader from "@/components/Loader/Loader";
+import LoadingError from "../Error/LoadingError";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
+import DeleteModal from "@/components/Modals/DeleteModal";
 
 const CartPage = () => {
-  const cartItems = useAppSelector(selectCartItems);
-  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-  const dispatch = useAppDispatch();
+  const token = useAppSelector(useCurrentToken);
+  const [removeCartItem] = useRemoveCartItemMutation();
+  const [clearCartItem] = useClearCartItemMutation();
+  const [updateCart] = useUpdateCartMutation();
 
-  // handle quantity
-  useEffect(() => {
-    const initialQuantities: { [key: string]: number } = {};
-    cartItems.forEach((item) => {
-      initialQuantities[item._id as string] = item.dQuantity;
-    });
-    setQuantities(initialQuantities);
-  }, [cartItems]);
+  const { data, isError, isLoading } = useGetCartQuery({ token: token });
+  if (isLoading) {
+    return <Loader height="h-[80vh]" />;
+  }
+  if (isError || !data) {
+    <LoadingError />;
+  }
+  const cartItems = data?.data?.items || [];
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [id]: newQuantity,
-    }));
-    dispatch(updateCart({ id, quantity: newQuantity }));
-  };
-
-  const decreaseQuantity = (id: string) => {
-    const currentQuantity= quantities[id] || 1;
-    if (currentQuantity > 1) {
-      updateQuantity(id, currentQuantity - 1);
+  const decreaseQuantity = async (id: string) => {
+    const updateItem = {
+      productId: id,
+      quantity: -1,
+    };
+    try {
+      await updateCart({ updateItem, token }).unwrap();
+    } catch (error) {
+      toast.error(error?.data?.message || "Something went wrong !", {
+        duration: 2000,
+      });
     }
   };
 
-  const increaseQuantity = (id: string) => {
-    const currentItem = cartItems.find((item) => item._id === id);
-    const pQuantity = currentItem!.pQuantity;
-    const currentQuantity = quantities[id] || 1;
-    if (currentQuantity >= pQuantity) {
-      toast.error("This exceed the available quantity!");
-      return;
+  const increaseQuantity = async (id: string) => {
+    const updateItem = {
+      productId: id,
+      quantity: 1,
+    };
+    try {
+      await updateCart({ updateItem, token }).unwrap();
+    } catch (error) {
+      toast.error(error?.data?.message || "Something went wrong !", {
+        duration: 2000,
+      });
     }
-    updateQuantity(id, currentQuantity + 1);
   };
 
   //calculate total price for a single item
@@ -63,17 +70,20 @@ const CartPage = () => {
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     for (const item of cartItems) {
-        const itemId = item._id;
-        if (itemId) { 
-            const quantity = quantities[itemId] ?? 1;
-            const itemPrice = calculateItemPrice(item.price, quantity);
-            totalPrice += itemPrice;
-        } else {
-            console.error('Item without _id:', item);
-        }
+      const itemId = item._id;
+      if (itemId) {
+        //const quantity = quantities[itemId] ?? 1;
+        const itemPrice = calculateItemPrice(
+          item?.product?.price,
+          item?.quantity
+        );
+        totalPrice += itemPrice;
+      } else {
+        console.error("Item without _id:", item);
+      }
     }
     return totalPrice;
-};
+  };
 
   //calculate total VAT
   const calculateTotalVAT = () => {
@@ -90,23 +100,20 @@ const CartPage = () => {
   };
 
   // remove item from cart
-  const handleRemoveItem = (id: string) => {
+  const handleRemoveItem = async (productId: string) => {
     try {
-      dispatch(removeCartItem(id));
-      toast.success("Item removed from cart!", { duration: 2000 });
+      await removeCartItem({ productId, token }).unwrap();
+      toast.success("Item removed from cart successfully !", {
+        duration: 2000,
+      });
     } catch (error) {
-      toast.error("Something went wrong!", { duration: 2000 });
+      toast.error((error as any)?.data?.message ||"Something went wrong!", { duration: 2000 });
     }
   };
 
   // delete whole cart
-  const handleRemoveCart = () => {
-    try {
-      dispatch(clearCart());
-      toast.success("Cart removed successfully!", { duration: 2000 });
-    } catch (error) {
-      toast.error("Something went wrong!", { duration: 2000 });
-    }
+  const handleclearCart = async () => {
+      await clearCartItem({ token }).unwrap();
   };
 
   return (
@@ -116,7 +123,7 @@ const CartPage = () => {
       </Helmet>
       <Container>
         <SectionHeader heading="Shopping Cart" />
-        {cartItems.length === 0 ? (
+        {cartItems?.length === 0 ? (
           <div className="text-center ">
             <p className="text-lg  text-gray-500 font-semibold mb-10">
               Your cart is empty.
@@ -127,33 +134,43 @@ const CartPage = () => {
           </div>
         ) : (
           <FadeInUpAnimation>
-            {" "}
             <div className="flex flex-col md:flex-row items-center justify-between gap-5 ">
-              <div className="md:w-4/5 bg-white md:pe-5">
+              <div className=" w-full sm:w-4/5  md:pe-5">
                 <div>
-                  {cartItems.map((item) => (
+                  {cartItems?.map((item: any) => (
                     <div
-                      key={item._id}
+                      key={item.product._id}
                       className="md:flex justify-between items-center border-b pb-3 mb-3"
                     >
-                      <div className="py-2  flex items-center gap-3">
+                      <div className="py-2 flex items-center gap-3">
                         <img
                           className="w-20"
-                          src={item.imageLink}
-                          alt={item.name}
+                          src={item.product.imageLink}
+                          alt={item.product.name}
                         />
                         <div>
-                          <p className="font-medium">{item.name}</p>
-                          <p className="text-gray-500">Price: ${item.price}</p>
+                          <p className="font-medium">{item.product.name}</p>
+                          <p className="text-gray-500 capitalize text-sm">
+                            Status:{" "}
+                            {item.product.quantity > 0 ? (
+                              <span className="text-green-500 font-medium">
+                                in stock
+                              </span>
+                            ) : (
+                              <span className="text-red-500 font-medium">
+                                out of stock
+                              </span>
+                            )}
+                          </p>
                         </div>
                       </div>
                       <div className="flex justify-between items-center md:gap-x-10">
-                        <div className="py-2 ">${item.price}</div>
+                        <div className="py-2 ">${item.product.price}</div>
                         <div className="py-2 ">
                           <div className="flex gap-4 md:gap-5 justify-center items-center">
                             <button
                               onClick={() =>
-                                decreaseQuantity(item._id as string)
+                                decreaseQuantity(item.product._id as string)
                               }
                               className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"
                             >
@@ -161,15 +178,13 @@ const CartPage = () => {
                             </button>
                             <input
                               type="text"
-                              value={
-                                quantities[item._id as string] || item.dQuantity
-                              }
+                              value={item.quantity}
                               readOnly
                               className="w-12 text-center border border-gray-300 rounded"
                             />
                             <button
                               onClick={() =>
-                                increaseQuantity(item._id as string)
+                                increaseQuantity(item.product._id as string)
                               }
                               className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded"
                             >
@@ -180,13 +195,15 @@ const CartPage = () => {
                         <div className="py-2 ">
                           $
                           {calculateItemPrice(
-                            item.price,
-                            quantities[item._id as string] || item.dQuantity
+                            item.product.price,
+                            item.quantity
                           )}
                         </div>
                         <div className="py-2 ">
                           <button
-                            onClick={() => handleRemoveItem(item._id as string)}
+                            onClick={() =>
+                              handleRemoveItem(item.product._id as string)
+                            }
                             className="text-red-500 hover:text-red-700"
                           >
                             <Trash2Icon />
@@ -196,16 +213,15 @@ const CartPage = () => {
                     </div>
                   ))}
                 </div>
-                <div className="text-right mt-10">
+                <div className="mt-10 flex justify-end">
                   <Link className="primary-button me-10" to="/all-products">
                     Continue Shopping
                   </Link>
-                  <button
-                    onClick={() => handleRemoveCart()}
-                    className="seceondary-button"
-                  >
-                    Clear Cart
-                  </button>
+                  <DeleteModal
+                    onDelete={() => handleclearCart()}
+                    entityName="cart items"
+                    buttonName="Clear Cart"
+                  />
                 </div>
               </div>
               <div className="w-full md:w-1/3 border rounded-md px-10">

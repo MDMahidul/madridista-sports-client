@@ -24,6 +24,7 @@ import { TQueryParams } from "@/types/global";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import LoadingError from "../Error/LoadingError";
 
 const ManageProducts = () => {
   const [deleteProduct] = useDeleteProductMutation();
@@ -37,19 +38,11 @@ const ManageProducts = () => {
   );
 
   if (isLoading) {
-    return <Loader height={"h-[80vh]"} />;
+    return <Loader height="h-[80vh]" />;
   }
 
   if (isError || !data) {
-    return (
-      <Container>
-        <div className="pt-12 md:pt-24">
-          <p className="mt-20 py-40 text-center text-xl font-semibold text-primary">
-            Something went wrong!
-          </p>
-        </div>
-      </Container>
-    );
+    <LoadingError />;
   }
 
   const handleDeleteProduct = async (id: string) => {

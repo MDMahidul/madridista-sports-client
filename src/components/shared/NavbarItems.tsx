@@ -4,15 +4,17 @@ import logo from "../../assets/logo.png";
 import ActiveLink from "../ActiveLink/ActiveLink";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
-import { selectCartItemCount } from "@/redux/features/cart/cartSlice";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { FaRegHeart  } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 import { Tooltip } from "flowbite-react";
+import { Loader } from "lucide-react";
+import LoadingError from "@/pages/Error/LoadingError";
+import { useGetCartQuery } from "@/redux/features/cart/cart.api";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
 
 const NavbarItems = () => {
-  const cartItemCount = useAppSelector(selectCartItemCount);
-
+  const token = useAppSelector(useCurrentToken);
   const [navbarHeight, setNavbarHeight] = useState("py-5");
   /* control nabar bg */
   useEffect(() => {
@@ -26,6 +28,16 @@ const NavbarItems = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  /* retrive cart items */
+  const { data, isError, isLoading } = useGetCartQuery({ token: token });
+  if (isLoading) {
+    return <Loader height="h-[80vh]" />;
+  }
+  if (isError || !data) {
+    <LoadingError />;
+  }
+
   return (
     <Navbar
       className={`bg-white border-gray-200 dark:bg-gray-500 shadow-md fixed w-full z-20 top-0 start-0 transition-all ease-out duration-200 ${navbarHeight} -px-20`}
@@ -56,13 +68,11 @@ const NavbarItems = () => {
               <HiOutlineShoppingBag className="text-2xl sm:text-3xl text-primary" />
 
               <span className="absolute -top-1 -right-2 bg-tertiary rounded-full font-medium text-[10px] px-1.5 py-[1px] text-white">
-                {cartItemCount}
+                {data?.data?.items?.length || 0}
               </span>
             </Link>
           </Tooltip>
-          <Tooltip content="User" animation="duration-500" style="light">
-            <DropdownMenu />
-          </Tooltip>
+          <DropdownMenu />
         </div>
         <Navbar.Toggle />
       </div>

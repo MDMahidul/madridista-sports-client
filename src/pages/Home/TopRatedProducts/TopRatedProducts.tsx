@@ -3,6 +3,7 @@ import ProductCard from "@/components/Cards/ProductCard";
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import Loader from "@/components/Loader/Loader";
+import LoadingError from "@/pages/Error/LoadingError";
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { TQueryParams } from "@/types/global";
 import { TProduct } from "@/types/types";
@@ -23,19 +24,11 @@ const TopRatedProducts = () => {
   );
 
   if (isLoading) {
-    return <Loader height={"h-[80vh]"} />;
+    return <Loader height="h-[80vh]" />;
   }
 
   if (isError || !data) {
-    return (
-      <Container>
-        <div className="pt-12 md:pt-24">
-          <p className="mt-20 py-40 text-center text-xl font-semibold text-primary">
-            Something went wrong!
-          </p>
-        </div>
-      </Container>
-    );
+    <LoadingError />;
   }
 
   const { data: products } = data;

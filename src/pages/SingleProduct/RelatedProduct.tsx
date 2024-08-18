@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import ProductCard from "@/components/Cards/ProductCard";
 import Container from "@/components/Container/Container";
@@ -8,6 +9,7 @@ import { TProduct } from "@/types/types";
 import { Loader } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingError from "../Error/LoadingError";
 
 type RelatedProductProps = {
   category: string;
@@ -28,19 +30,11 @@ const RelatedProduct: React.FC<RelatedProductProps> = ({ category, limit }) => {
   );
 
   if (isLoading) {
-    return <Loader height={"h-[80vh]"} />;
+    return <Loader height="h-[80vh]" />;
   }
 
   if (isError || !data) {
-    return (
-      <Container>
-        <div className="pt-12 md:pt-24">
-          <p className="mt-20 py-40 text-center text-xl font-semibold text-primary">
-            Something went wrong!
-          </p>
-        </div>
-      </Container>
-    );
+    <LoadingError />;
   }
 
   const { data: products } = data;

@@ -37,7 +37,7 @@ const Categories = () => {
     },
     {
       id: 6,
-      name: "Baseball",
+      name: "baseball",
       image: "https://nativebag.in/wp-content/uploads/2022/05/baseball.jpg",
     },
   ];

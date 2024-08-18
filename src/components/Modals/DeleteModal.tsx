@@ -55,7 +55,7 @@ const DeleteModal = ({
             <button className="seceondary-button">{buttonName}</button>
           ) : (
             <button>
-              <TrashIcon className="size-6 hover:text-primary transition-all duration-200 hover:scale-110" />
+              <TrashIcon className="size-6 text-red-500 hover:text-red-600 transition-all duration-200 hover:scale-105" />
             </button>
           )}
         </DialogTrigger>

@@ -98,9 +98,9 @@ const ProductCard = ({ product }: TProductCardProps) => {
           <p className="text-sm md:text-base font-medium text-gray-600 capitalize">
             Brand: {brand}
           </p>
-          <p className="text-sm md:text-base font-medium text-gray-600 capitalize">
+         {/*  <p className="text-sm md:text-base font-medium text-gray-600 capitalize">
             Category: {category}
-          </p>
+          </p> */}
           <div className="flex items-center mt-2.5 mb-5">
             <div className="flex items-center space-x-1 rtl:space-x-reverse">
               <Rating

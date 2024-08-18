@@ -20,7 +20,7 @@ type TBreadcrumbProps = {
 const BreadcrumbComponent = ({ items }: TBreadcrumbProps) => {
   return (
     <Breadcrumb>
-      <BreadcrumbList className="mb-10 font-semibold text-primary capitalize">
+      <BreadcrumbList className="mb-5 font-semibold text-primary capitalize">
         {items?.map((item, index) => (
           <BreadcrumbItem key={index}>
             {item.isCurrentPage ? (
