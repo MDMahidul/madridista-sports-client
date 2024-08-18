@@ -134,8 +134,8 @@ const CartPage = () => {
           </div>
         ) : (
           <FadeInUpAnimation>
-            <div className="flex flex-col md:flex-row items-center justify-between gap-5 ">
-              <div className=" w-full sm:w-4/5  md:pe-5">
+            <div className="flex flex-col md:flex-row items-start justify-between gap-5 ">
+              <div className=" w-full sm:w-4/5  md:pe-5  overflow-y-auto">
                 <div>
                   {cartItems?.map((item: any) => (
                     <div
@@ -164,7 +164,7 @@ const CartPage = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center md:gap-x-10">
+                      <div className="flex justify-evenly sm:justify-between items-center md:gap-x-10">
                         <div className="py-2 ">${item.product.price}</div>
                         <div className="py-2 ">
                           <div className="flex gap-4 md:gap-5 justify-center items-center">
@@ -224,7 +224,7 @@ const CartPage = () => {
                   />
                 </div>
               </div>
-              <div className="w-full md:w-1/3 border rounded-md px-10">
+              <div className="w-full md:w-1/3 border rounded-md px-10 sticky top-28">
                 <p className="text-2xl font-bold text-gray-600 text-center py-8">
                   Order summary
                 </p>
@@ -261,7 +261,7 @@ const CartPage = () => {
                 <div className="my-8 ">
                   <Link
                     to="/checkout"
-                    className="bg-primary text-white py-3 px-6 rounded-md shadow-md hover:bg-primary-dark"
+                    className="bg-primary text-white py-3 px-6 rounded-md hover:bg-blue-900 hover:shadow-xl"
                   >
                     Checkout
                   </Link>

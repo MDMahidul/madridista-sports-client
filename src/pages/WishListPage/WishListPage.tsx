@@ -20,11 +20,14 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import DeleteModal from "@/components/Modals/DeleteModal";
+import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import { useCurrentToken } from "@/redux/features/auth/authSlice";
 
 const WishListPage = () => {
   const dispatch = useAppDispatch();
+  const token = useAppSelector(useCurrentToken);
   const wishListItems = useAppSelector(SelectedWishList);
-
+  const [addToCart] = useAddToCartMutation();
   const handleRemoveWishListItem = (id: string) => {
     try {
       dispatch(removeWishList({ productId: id }));
@@ -37,6 +40,26 @@ const WishListPage = () => {
   const handleClearWishListItem = async () => {
     await dispatch(clearWishList());
   };
+
+  const handleAddToCart = async () => {
+    try {
+      const items = wishListItems.map((item) => ({
+        product: item._id,
+        quantity: 1,
+      }));
+
+      await addToCart({ items, token }).unwrap();
+      await dispatch(clearWishList());
+      toast.success("All items added to cart successfully!", {
+        duration: 2000,
+      });
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to add items to cart!", {
+        duration: 2000,
+      });
+    }
+  };
+
   return (
     <div className="pt-10 md:pt-16">
       <Helmet>
@@ -106,7 +129,12 @@ const WishListPage = () => {
                   <Link className="primary-button" to="/all-products">
                     Continue
                   </Link>
-                  <button className="seceondary-button">Add To Cart</button>
+                  <button
+                    onClick={handleAddToCart}
+                    className="seceondary-button"
+                  >
+                    Add To Cart
+                  </button>
                   <DeleteModal
                     onDelete={() => handleClearWishListItem()}
                     entityName="wishlist"

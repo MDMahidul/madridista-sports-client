@@ -1,3 +1,4 @@
+import { useGetWishlistQuery } from "@/redux/features/wishList/wishList.api";
 import { SelectedWishList } from "@/redux/features/wishList/wishListslice";
 import { useAppSelector } from "@/redux/hooks";
 import { FaHeart } from "react-icons/fa";
@@ -5,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const WishList = () => {
   const wishListItems = useAppSelector(SelectedWishList);
+const { data:wishlists } = useGetWishlistQuery("");
 
   return (
     <Link to="/wishlist">
