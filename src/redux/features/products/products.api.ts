@@ -51,20 +51,12 @@ const productsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["products"],
     }),
-    addOrder: builder.mutation({
-      query: (data) => ({
-        method: "POST",
-        url: "/order/add-order",
-        body: data,
-      }),
-    }),
   }),
 });
 
 export const {
   useGetAllProductsQuery,
   useGetSingleProductQuery,
-  useAddOrderMutation,
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,

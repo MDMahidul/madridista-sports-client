@@ -3,7 +3,7 @@ import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import SlideInFromLeft from "@/components/Animations/SlideInFromLeft";
 import Container from "@/components/Container/Container";
 import { useGetSingleProductQuery } from "@/redux/features/products/products.api";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
 import {
   ArrowLeftRight,
@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   ShoppingCart,
 } from "lucide-react";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
@@ -22,11 +23,18 @@ import BreadcrumbComponent from "@/components/Breadcrumb/Breadcrumb";
 import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { useCurrentToken } from "@/redux/features/auth/authSlice";
 import LoadingError from "../Error/LoadingError";
+import {
+  addWishList,
+  removeWishList,
+  SelectedWishList,
+} from "@/redux/features/wishList/wishListslice";
 
 const SingleProduct = () => {
   const [addToCart] = useAddToCartMutation();
   const token = useAppSelector(useCurrentToken);
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useAppDispatch();
+  const wishListItems = useAppSelector(SelectedWishList);
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -51,6 +59,31 @@ const SingleProduct = () => {
 
   const { data: product } = data;
   //console.log(data);
+
+  const isInWishList = wishListItems.some((item) => item._id === product._id);
+  const handleWishList = () => {
+    try {
+      if (isInWishList) {
+        dispatch(removeWishList({ productId: product._id! }));
+        toast.success("Product removed from wishlist!", { duration: 2000 });
+      } else {
+        dispatch(
+          addWishList({
+            product: {
+              _id: product._id,
+              name: product.name,
+              price: product.price,
+              imageLink: product.imageLink,
+              quantity: product.quantity,
+            },
+          })
+        );
+        toast.success("Product added to wishlist !", { duration: 2000 });
+      }
+    } catch (error) {
+      toast.error("Something went wrong !", { duration: 2000 });
+    }
+  };
 
   const handleAddToCart = async () => {
     /* check if there is any user or product*/
@@ -115,13 +148,21 @@ const SingleProduct = () => {
             {product ? (
               <FadeInUpAnimation>
                 <div className="flex flex-col md:flex-row gap-5 md:gap-0">
-                  <div className="md:w-1/2   flex  lg:flex-col-reverse xl:flex-row gap-3">
+                  <div className="relative md:w-1/2   flex  lg:flex-col-reverse xl:flex-row gap-3">
                     <div>
                       <img
                         className="w-[450px] md:w-[500px] lg:w-[500px] xl:w-[700px]"
                         src={product.imageLink}
                         alt=""
                       />
+                    </div>
+                    <div
+                      className={`absolute top-3.5 right-4   hover:text-tertiary transition-all duration-200
+             text-2xl ${isInWishList ? "text-tertiary" : "text-gray-400"} `}
+                    >
+                      <button onClick={() => handleWishList()}>
+                        {isInWishList ? <FaHeart /> : <FaRegHeart />}
+                      </button>
                     </div>
                   </div>
                   <div className="md:w-1/2  flex flex-col md:mx-8 lg:mx-14 xl:mx-15">

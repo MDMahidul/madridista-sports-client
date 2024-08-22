@@ -12,7 +12,11 @@ import { Link } from "react-router-dom";
 
 const TopRatedProducts = () => {
   const [params, setParams] = useState<TQueryParams[]>([]);
-  const { data, isLoading, isError } = useGetAllProductsQuery(
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useGetAllProductsQuery(
     [
       { name: "sort", value: "-ratings" },
       { name: "limit", value: 6 },
@@ -27,18 +31,17 @@ const TopRatedProducts = () => {
     return <Loader height="h-[80vh]" />;
   }
 
-  if (isError || !data) {
+  if (isError || !products) {
     <LoadingError />;
   }
 
-  const { data: products } = data;
 
   return (
     <div className="md-5 md:mb-10">
       <Container>
         <SectionHeader heading={"Top Rated Products"} />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5 md:gap-y-10 ">
-          {products.map((product: TProduct, index: number) => (
+          {products?.data?.map((product: TProduct, index: number) => (
             <FadeInUpAnimation custom={index} key={product._id}>
               <ProductCard product={product} />
             </FadeInUpAnimation>

@@ -1,7 +1,6 @@
 import App from "@/App";
 import AboutUs from "@/pages/AboutUs/AboutUs";
 import HomePage from "@/pages/Home/HomePage/HomePage";
-import ManageProducts from "@/pages/ManageProducts/ManageProducts";
 import { createBrowserRouter } from "react-router-dom";
 import SingleProduct from "@/pages/SingleProduct/SingleProduct";
 import CartPage from "@/pages/Cart/Cart";
@@ -18,6 +17,7 @@ import Dashboard from "@/pages/Dashboard/Dashboard";
 import UnauthorizedPage from "@/pages/Error/UnauthorizedPage";
 import PrivateRoute from "./PrivateRoute";
 import WishListPage from "@/pages/WishListPage/WishListPage";
+import Blogs from "@/pages/Blogs/Blogs";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         path: "/product/:id",
         element: <SingleProduct />,
       },
-/*        {
+      /*        {
         path:'/all-products/:category',
         element:<AllProducts/>
       }, */
@@ -42,8 +42,8 @@ const router = createBrowserRouter([
         element: <AllProducts />,
       },
       {
-        path: "/manage-products",
-        element: <ManageProducts />,
+        path: "/blogs",
+        element: <Blogs />,
       },
       {
         path: "/about-us",
@@ -59,7 +59,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/checkout",
-        element: <CheckOut />,
+        element: (
+          <PrivateRoute roles={['user','admin','superAdmin']}>
+            <CheckOut />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/order-confirmation",
@@ -77,9 +81,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-            <Dashboard />
-        ),
+        element: <Dashboard />,
       },
     ],
   },

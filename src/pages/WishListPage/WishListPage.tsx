@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
@@ -28,6 +29,7 @@ const WishListPage = () => {
   const token = useAppSelector(useCurrentToken);
   const wishListItems = useAppSelector(SelectedWishList);
   const [addToCart] = useAddToCartMutation();
+
   const handleRemoveWishListItem = (id: string) => {
     try {
       dispatch(removeWishList({ productId: id }));
@@ -42,6 +44,13 @@ const WishListPage = () => {
   };
 
   const handleAddToCart = async () => {
+    if(!token){
+      toast.error("Please sing in first!", {
+        duration: 2000,
+      });
+
+      return;
+    }
     try {
       const items = wishListItems.map((item) => ({
         product: item._id,
@@ -53,7 +62,7 @@ const WishListPage = () => {
       toast.success("All items added to cart successfully!", {
         duration: 2000,
       });
-    } catch (error) {
+    } catch (error:any) {
       toast.error(error?.data?.message || "Failed to add items to cart!", {
         duration: 2000,
       });

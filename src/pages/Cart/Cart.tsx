@@ -24,14 +24,14 @@ const CartPage = () => {
   const [clearCartItem] = useClearCartItemMutation();
   const [updateCart] = useUpdateCartMutation();
 
-  const { data, isError, isLoading } = useGetCartQuery({ token: token });
+  const { data:cartData, isError, isLoading } = useGetCartQuery({ token: token },{skip: !token});
   if (isLoading) {
     return <Loader height="h-[80vh]" />;
   }
-  if (isError || !data) {
+  if (isError || !cartData) {
     <LoadingError />;
   }
-  const cartItems = data?.data?.items || [];
+  const cartItems = cartData?.data?.items || [];
 
   const decreaseQuantity = async (id: string) => {
     const updateItem = {
@@ -124,14 +124,16 @@ const CartPage = () => {
       <Container>
         <SectionHeader heading="Shopping Cart" />
         {cartItems?.length === 0 ? (
-          <div className="text-center ">
-            <p className="text-lg  text-gray-500 font-semibold mb-10">
-              Your cart is empty.
-            </p>
-            <Link to="/all-products" className="primary-button">
-              Shop Now
-            </Link>
-          </div>
+          <FadeInUpAnimation>
+            <div className="text-center ">
+              <p className="text-lg  text-gray-500 font-semibold mb-10">
+                Your cart is empty.
+              </p>
+              <Link to="/all-products" className="primary-button">
+                Shop Now
+              </Link>
+            </div>
+          </FadeInUpAnimation>
         ) : (
           <FadeInUpAnimation>
             <div className="flex flex-col md:flex-row items-start justify-between gap-5 ">

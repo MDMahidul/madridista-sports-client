@@ -96,7 +96,7 @@
     @apply border-0 border-b border-b-secondary focus:ring-0 text-gray-600 text-sm min-w-56 sm:min-w-60 md:min-w-80 
   }
   .add-product-label {
-    @apply block mb-2 text-sm font-medium text-gray-800 dark:text-white mt-2;
+    @apply block mb-2 text-sm font-medium text-gray-600 dark:text-white mt-2;
   }
 
   .floating-label{

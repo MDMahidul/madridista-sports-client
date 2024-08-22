@@ -14,6 +14,7 @@ import MenuOptions from "./MenuOptions";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logOut, selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { resetOrderStatus } from "@/redux/features/order/order.slice";
 
 const DropdownMenu = () => {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ const DropdownMenu = () => {
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logOut());
+    dispatch(resetOrderStatus());
   };
   return (
     <div className="flex items-center justify-center bg-white">

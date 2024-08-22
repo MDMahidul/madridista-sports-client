@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "./api/baseApi";
 import authReducer from "./features/auth/authSlice";
 import cartReducer from "./features/cart/cartSlice";
+import orderReducer from "./features/order/order.slice";
 import wishListReducer from "./features/wishList/wishListslice";
 import {
   persistReducer,
@@ -19,12 +20,17 @@ import storage from "redux-persist/lib/storage";
 const cartPersistConfig = { key: "cart", storage };
 const authPersistConfig = { key: "auth", storage };
 const wishListPersistConfig = { key: "wishList", storage };
+const orderPlacedPersistConfig = { key: "orderPlaced", storage };
 
 const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 const persistedWishListReducer = persistReducer(
   wishListPersistConfig,
   wishListReducer
+);
+const orderPlacedWishListReducer = persistReducer(
+  orderPlacedPersistConfig,
+  orderReducer
 );
 
 export const store = configureStore({
@@ -33,6 +39,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
     carts: persistedCartReducer,
     wishList: persistedWishListReducer,
+    orderPlaced: orderPlacedWishListReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
