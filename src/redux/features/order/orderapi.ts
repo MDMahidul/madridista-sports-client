@@ -16,7 +16,17 @@ const orderApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["cartItem", "order"],
     }),
+    getUserOrder: builder.query({
+      query: ({ token }) => ({
+        url: "/order/get-user-order",
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }),
+      providesTags: ["order","cartItem"],
+    }),
   }),
 });
 
-export const { useAddOrderMutation } = orderApi;
+export const { useAddOrderMutation,useGetUserOrderQuery } = orderApi;

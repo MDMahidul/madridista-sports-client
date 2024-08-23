@@ -6,10 +6,10 @@ import SectionHeader from "@/components/Headers/SectionsHeader";
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { TQueryParams } from "@/types/global";
 import { TProduct } from "@/types/types";
-import { Loader } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingError from "../Error/LoadingError";
+import Loader from "@/components/Loader/Loader";
 
 type RelatedProductProps = {
   category: string;

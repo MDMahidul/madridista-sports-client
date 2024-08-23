@@ -36,7 +36,7 @@ const SignUpPage = () => {
         duration: 2000,
         style: { padding: "10px" },
       });
-      navigate('/');
+      navigate('/signin');
     } catch (error:any) {
       console.log(error.data.errorSources[0].message);
       toast.error(error.data?.errorSources[0]?.message, {

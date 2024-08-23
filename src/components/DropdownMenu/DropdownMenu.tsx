@@ -85,7 +85,14 @@ const DropdownMenu = () => {
           ) : null}
           {user && (
             <>
-              <MenuOptions setOpen={setOpen} Icon={FaUserAlt} text="Profile" />
+              <Link to="/profile">
+                <MenuOptions
+                  setOpen={setOpen}
+                  Icon={FaUserAlt}
+                  text="Profile"
+                />
+              </Link>
+
               <MenuOptions
                 setOpen={setOpen}
                 Icon={FaRegBell}

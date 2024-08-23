@@ -18,6 +18,11 @@ import UnauthorizedPage from "@/pages/Error/UnauthorizedPage";
 import PrivateRoute from "./PrivateRoute";
 import WishListPage from "@/pages/WishListPage/WishListPage";
 import Blogs from "@/pages/Blogs/Blogs";
+import ProfileLayout from "@/components/layout/ProfileLayout";
+import Profile from "@/pages/UserMenu/Profile";
+import MyOrders from "@/pages/UserMenu/MyOrders";
+import MyCart from "@/pages/UserMenu/MyCart";
+import MyWishlist from "@/pages/UserMenu/MyWishlist";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +65,7 @@ const router = createBrowserRouter([
       {
         path: "/checkout",
         element: (
-          <PrivateRoute roles={['user','admin','superAdmin']}>
+          <PrivateRoute roles={["user", "admin", "superAdmin"]}>
             <CheckOut />
           </PrivateRoute>
         ),
@@ -68,6 +73,33 @@ const router = createBrowserRouter([
       {
         path: "/order-confirmation",
         element: <SuccessPage />,
+      },
+    ],
+  },
+  {
+    path: "/profile",
+    element: (
+      <PrivateRoute roles={["user","admin", "superAdmin"]}>
+        <ProfileLayout />
+      </PrivateRoute>
+    ),
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Profile />,
+      },
+      {
+        path:'my-orders',
+        element: <MyOrders />,
+      },
+      {
+        path:'my-cart',
+        element: <MyCart />,
+      },
+      {
+        path:'my-wishlist',
+        element: <MyWishlist />,
       },
     ],
   },

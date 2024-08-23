@@ -1,23 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Trash2Icon } from "lucide-react";
-import Container from "@/components/Container/Container";
-import { toast } from "sonner";
-import SectionHeader from "@/components/Headers/SectionsHeader";
-import { Link } from "react-router-dom";
 import FadeInUpAnimation from "@/components/Animations/FadeInUpAnimation";
-import { Helmet } from "react-helmet-async";
+import Container from "@/components/Container/Container";
+import Loader from "@/components/Loader/Loader";
+import useUserProfile from "@/hooks/useUserProfile";
 import {
   useClearCartItemMutation,
   useGetCartQuery,
   useRemoveCartItemMutation,
   useUpdateCartMutation,
 } from "@/redux/features/cart/cart.api";
-import Loader from "@/components/Loader/Loader";
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import LoadingError from "../Error/LoadingError";
+import { toast } from "sonner";
 import DeleteModal from "@/components/Modals/DeleteModal";
-import useUserProfile from "@/hooks/useUserProfile";
 
-const CartPage = () => {
+const MyCart = () => {
   const [removeCartItem] = useRemoveCartItemMutation();
   const [clearCartItem] = useClearCartItemMutation();
   const [updateCart] = useUpdateCartMutation();
@@ -35,6 +34,11 @@ const CartPage = () => {
   }
   const cartItems = cartData?.data?.items || [];
 
+  //calculate total price for a single item
+  const calculateItemPrice = (price: number, quantity: number) => {
+    return price * quantity;
+  };
+
   const decreaseQuantity = async (id: string) => {
     const updateItem = {
       productId: id,
@@ -42,7 +46,7 @@ const CartPage = () => {
     };
     try {
       await updateCart({ updateItem, token }).unwrap();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.data?.message || "Something went wrong !", {
         duration: 2000,
       });
@@ -56,16 +60,30 @@ const CartPage = () => {
     };
     try {
       await updateCart({ updateItem, token }).unwrap();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.data?.message || "Something went wrong !", {
         duration: 2000,
       });
     }
   };
 
-  //calculate total price for a single item
-  const calculateItemPrice = (price: number, quantity: number) => {
-    return price * quantity;
+  // remove item from cart
+  const handleRemoveItem = async (productId: string) => {
+    try {
+      await removeCartItem({ productId, token }).unwrap();
+      toast.success("Item removed from cart successfully !", {
+        duration: 2000,
+      });
+    } catch (error) {
+      toast.error((error as any)?.data?.message || "Something went wrong!", {
+        duration: 2000,
+      });
+    }
+  };
+
+  // delete whole cart
+  const handleclearCart = async () => {
+    await clearCartItem({ token }).unwrap();
   };
 
   //calculate total price for all items
@@ -101,35 +119,15 @@ const CartPage = () => {
     return totalPrice * (1 + vatRate);
   };
 
-  // remove item from cart
-  const handleRemoveItem = async (productId: string) => {
-    try {
-      await removeCartItem({ productId, token }).unwrap();
-      toast.success("Item removed from cart successfully !", {
-        duration: 2000,
-      });
-    } catch (error) {
-      toast.error((error as any)?.data?.message || "Something went wrong!", {
-        duration: 2000,
-      });
-    }
-  };
-
-  // delete whole cart
-  const handleclearCart = async () => {
-    await clearCartItem({ token }).unwrap();
-  };
-
   return (
-    <div className="pt-10 md:pt-16">
+    <div className="mt-10 mb-20  sm:mb-40">
       <Helmet>
-        <title>Cart Items</title>
+        <title>My Cart</title>
       </Helmet>
       <Container>
-        <SectionHeader heading="Shopping Cart" />
         {cartItems?.length === 0 ? (
           <FadeInUpAnimation>
-            <div className="text-center flex justify-center items-center flex-col h-[50vh] ">
+            <div className="text-center flex justify-center items-center flex-col h-[50vh]">
               <p className="text-lg  text-gray-500 font-semibold mb-10">
                 Your cart is empty.
               </p>
@@ -141,7 +139,7 @@ const CartPage = () => {
         ) : (
           <FadeInUpAnimation>
             <div className="flex flex-col md:flex-row items-start justify-between gap-5 ">
-              <div className=" w-full sm:w-4/5  md:pe-5  overflow-y-auto">
+              <div className=" w-full">
                 <div>
                   {cartItems?.map((item: any) => (
                     <div
@@ -218,57 +216,50 @@ const CartPage = () => {
                       </div>
                     </div>
                   ))}
+                  <div>
+                    <div className=" flex justify-between gap-10">
+                      <div>
+                        <p className="text-base font-semibold text-gray-500 mb-2">
+                          Original Price:
+                        </p>
+                        <p className="text-base font-semibold text-gray-500 mb-2">
+                          Tax(15%):
+                        </p>
+                        <p className="text-base font-medium text-gray-500 mb-2">
+                          Shipping
+                        </p>
+                        <p className="text-lg font-medium text-gray-700 mb-2">
+                          Total Price
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-lg text-gray-700 font-semibold mb-1">
+                          ${calculateTotalPrice().toFixed(2)}
+                        </p>
+                        <p className="text-lg text-gray-700 font-semibold mb-1">
+                          ${calculateTotalVAT().toFixed(2)}
+                        </p>
+                        <p className="text-lg text-gray-700 font-semibold mb-1">
+                          Free
+                        </p>
+                        <p className="text-lg text-gray-700 font-semibold mb-1">
+                          ${calculateTotalPriceWithVAT().toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-10 flex justify-end">
-                  <Link className="primary-button me-10" to="/all-products">
-                    Continue Shopping
-                  </Link>
+                <div className="mt-10 flex justify-between sm:justify-end sm:items-center flex-wrap gap-1 sm:gap-10">
                   <DeleteModal
                     onDelete={() => handleclearCart()}
                     entityName="cart items"
                     buttonName="Clear Cart"
                   />
-                </div>
-              </div>
-              <div className="w-full md:w-1/3 border rounded-md px-10 sticky top-28">
-                <p className="text-2xl font-bold text-gray-600 text-center py-8">
-                  Order summary
-                </p>
-                <div className=" flex justify-between gap-10">
-                  <div>
-                    <p className="text-base font-semibold text-gray-500 mb-2">
-                      Original Price:
-                    </p>
-                    <p className="text-base font-semibold text-gray-500 mb-2">
-                      Tax(15%):
-                    </p>
-                    <p className="text-base font-medium text-gray-500 mb-2">
-                      Shipping
-                    </p>
-                    <p className="text-lg font-medium text-gray-700 mb-2">
-                      Total Price
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-lg text-gray-700 font-semibold mb-1">
-                      ${calculateTotalPrice().toFixed(2)}
-                    </p>
-                    <p className="text-lg text-gray-700 font-semibold mb-1">
-                      ${calculateTotalVAT().toFixed(2)}
-                    </p>
-                    <p className="text-lg text-gray-700 font-semibold mb-1">
-                      Free
-                    </p>
-                    <p className="text-lg text-gray-700 font-semibold mb-1">
-                      ${calculateTotalPriceWithVAT().toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-                <div className="my-8 ">
-                  <Link
-                    to="/checkout"
-                    className="bg-primary text-white py-3 px-6 rounded-md hover:bg-blue-900 hover:shadow-xl"
-                  >
+
+                  <Link className="primary-button" to="/all-products">
+                    Continue Shopping
+                  </Link>
+                  <Link to="/checkout" className="primary-button text-center">
                     Checkout
                   </Link>
                 </div>
@@ -281,4 +272,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default MyCart;

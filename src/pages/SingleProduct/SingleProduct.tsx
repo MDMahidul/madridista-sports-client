@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
 import {
   ArrowLeftRight,
-  Loader,
   Lock,
   Phone,
   ShieldCheck,
@@ -28,6 +27,7 @@ import {
   removeWishList,
   SelectedWishList,
 } from "@/redux/features/wishList/wishListslice";
+import Loader from "@/components/Loader/Loader";
 
 const SingleProduct = () => {
   const [addToCart] = useAddToCartMutation();
