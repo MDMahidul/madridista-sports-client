@@ -67,7 +67,7 @@ const NavbarItems = () => {
               <HiOutlineShoppingBag className="text-2xl sm:text-3xl text-primary" />
 
               <span className="absolute -top-1 -right-2 bg-tertiary rounded-full font-medium text-[10px] px-1.5 py-[1px] text-white">
-                {data?.data?.items?.length || 0}
+                {!token ? 0 : data?.data?.items?.length || 0}
               </span>
             </Link>
           </Tooltip>

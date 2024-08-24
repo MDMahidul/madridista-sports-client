@@ -23,6 +23,9 @@ import Profile from "@/pages/UserMenu/Profile";
 import MyOrders from "@/pages/UserMenu/MyOrders";
 import MyCart from "@/pages/UserMenu/MyCart";
 import MyWishlist from "@/pages/UserMenu/MyWishlist";
+import ManageProducts from "@/pages/Dashboard/ManageProducts/ManageProducts";
+import ManageBlogs from "@/pages/Dashboard/ManageBlogs/ManageBlogs";
+import Orders from "@/pages/Dashboard/Orders/Orders";
 
 const router = createBrowserRouter([
   {
@@ -79,7 +82,7 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: (
-      <PrivateRoute roles={["user","admin", "superAdmin"]}>
+      <PrivateRoute roles={["user", "admin", "superAdmin"]}>
         <ProfileLayout />
       </PrivateRoute>
     ),
@@ -90,15 +93,15 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path:'my-orders',
+        path: "my-orders",
         element: <MyOrders />,
       },
       {
-        path:'my-cart',
+        path: "my-cart",
         element: <MyCart />,
       },
       {
-        path:'my-wishlist',
+        path: "my-wishlist",
         element: <MyWishlist />,
       },
     ],
@@ -114,6 +117,18 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Dashboard />,
+      },
+      {
+        path: "manage-products",
+        element: <ManageProducts />,
+      },
+      {
+        path: "manage-blogs",
+        element: <ManageBlogs />,
+      },
+      {
+        path: "manage-orders",
+        element: <Orders />,
       },
     ],
   },

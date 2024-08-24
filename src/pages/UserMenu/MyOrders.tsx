@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDate } from "@/utils/formatDate";
 
 const MyOrders = () => {
   const { token } = useUserProfile();
@@ -32,7 +33,7 @@ const MyOrders = () => {
   }
 
   // Function to format the date
-  const formatDate = (dateString: string) => {
+/*   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return (
       date.toLocaleDateString("en-US", {
@@ -46,7 +47,7 @@ const MyOrders = () => {
         minute: "2-digit",
       })
     );
-  };
+  }; */
 
   return (
     <div className="mt-10 mb-20  sm:mb-40">

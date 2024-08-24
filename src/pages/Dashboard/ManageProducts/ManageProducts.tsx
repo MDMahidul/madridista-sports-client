@@ -24,7 +24,7 @@ import { TQueryParams } from "@/types/global";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import LoadingError from "../Error/LoadingError";
+import LoadingError from "../../Error/LoadingError";
 
 const ManageProducts = () => {
   const [deleteProduct] = useDeleteProductMutation();
@@ -56,12 +56,12 @@ const ManageProducts = () => {
   const { data: products } = data;
   console.log(data.meta);
   return (
-    <div className="pt-20 md:pt-24 ">
+    <div className="">
       <Helmet>
         <title>Manage Products</title>
       </Helmet>
       <Container>
-        <div className="my-5 flex justify-between items-center">
+        <div className="my-5 flex justify-between items-center border-b border-secondary pb-2">
           <SlideInFromLeft>
             <p className="font-semibold text-xl text-tertiary">
               <span className="text-primary">Total Products:</span>{" "}

@@ -178,6 +178,7 @@ const UpdateProductModal = ({ product }: TUpdateModalProp) => {
                   <option value="football"> Football </option>
                   <option value="cricket"> Cricket </option>
                   <option value="tennis"> Tennis </option>
+                  <option value="golf"> Golf </option>
                   <option value="basketball">Basketball </option>
                 </select>
                 {errors.category && (

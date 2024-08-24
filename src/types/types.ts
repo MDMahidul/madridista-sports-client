@@ -10,3 +10,12 @@ export type TProduct = {
   description: string;
   imageLink: string;
 };
+export type TBlog = {
+  _id?: string;
+  blogTitle: string;
+  category: string;
+  authorName: string;
+  imageLink: string;
+  description: string;
+  isDeleted: boolean;
+};

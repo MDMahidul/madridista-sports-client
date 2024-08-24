@@ -1,14 +1,18 @@
 import { useState } from "react";
 import logo from "@/assets/msports.webp";
 import { FiMenu } from "react-icons/fi";
-import { FaUsers, FaHome, FaSignOutAlt } from "react-icons/fa";
+import { FaUsers, FaHome, FaSignOutAlt, FaList } from "react-icons/fa";
 import { HiMiniRectangleStack } from "react-icons/hi2";
-import { MdShoppingCart } from "react-icons/md";
+import { MdShoppingCart, MdDashboard } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { RiAdminFill } from "react-icons/ri";
 
 const SidebarMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useAppSelector(selectCurrentUser);
 
   const handleToggleSidebar = () => setIsOpen(!isOpen);
 
@@ -46,53 +50,88 @@ const SidebarMenu = () => {
               Madridista Sports
             </p>
           </div>
-         
         </div>
-        <div>
+        <div className="flex-grow">
           <nav>
             <NavLink
-              to="addproduct"
+              to="/dashboard"
+              end
               className={({ isActive }) =>
-                `sidebar ${
-                  isActive ? "sidebar-active" : "text-gray-600 dark:text-white"
-                }`
+                `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
+              }
+            >
+              <MdDashboard className="w-5 h-5" />
+              <span className="mx-4 font-medium">Dashboard</span>
+            </NavLink>
+            <NavLink
+              to="manage-products"
+              className={({ isActive }) =>
+                `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
+              }
+            >
+              <FaList className="w-5 h-5" />
+              <span className="mx-4 font-medium">Manage Products</span>
+            </NavLink>
+            <NavLink
+              to="manage-orders"
+              className={({ isActive }) =>
+                `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
               }
             >
               <MdShoppingCart className="w-5 h-5" />
-              <span className="mx-4 font-medium">Add Product</span>
+              <span className="mx-4 font-medium"> Orders</span>
             </NavLink>
             <NavLink
-              to="listproduct"
+              to="manage-blogs"
               className={({ isActive }) =>
-                `sidebar ${
-                  isActive ? "sidebar-active" : "text-gray-600 dark:text-white"
-                }`
+                `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
               }
             >
               <HiMiniRectangleStack className="w-5 h-5" />
-              <span className="mx-4 font-medium">Product List</span>
+              <span className="mx-4 font-medium"> Blogs</span>
             </NavLink>
-            <NavLink
-              to="listuser"
-              className={({ isActive }) =>
-                `sidebar ${
-                  isActive ? "sidebar-active" : "text-gray-600 dark:text-white"
-                }`
-              }
-            >
-              <FaUsers className="w-5 h-5" />
-              <span className="mx-4 font-medium">Users List</span>
-            </NavLink>
+            {user?.role === "superAdmin" ? (
+              <>
+                <NavLink
+                  to="listuser"
+                  className={({ isActive }) =>
+                    `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
+                  }
+                >
+                  <RiAdminFill className="w-5 h-5" />
+                  <span className="mx-4 font-medium">Admin Panel</span>
+                </NavLink>
+                <NavLink
+                  to="listuser"
+                  className={({ isActive }) =>
+                    `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
+                  }
+                >
+                  <FaUsers className="w-5 h-5" />
+                  <span className="mx-4 font-medium">All Users List</span>
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="listuser"
+                  className={({ isActive }) =>
+                    `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
+                  }
+                >
+                  <FaUsers className="w-5 h-5" />
+                  <span className="mx-4 font-medium">Users List</span>
+                </NavLink>
+              </>
+            )}
           </nav>
         </div>
-        <div>
+        <div className="mt-auto">
           <hr />
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `sidebar ${
-                isActive ? "sidebar-active" : "text-gray-600 dark:text-white"
-              }`
+              `sidebar ${isActive ? "sidebar-active" : "text-gray-600"}`
             }
           >
             <FaHome className="w-5 h-5" />
@@ -101,7 +140,7 @@ const SidebarMenu = () => {
           </NavLink>
           <button
             /* onClick={() => logOut()} */
-            className="w-full sidebar text-gray-600 dark:text-white"
+            className="w-full sidebar text-gray-600"
           >
             <FaSignOutAlt className="w-5 h-5" />
 
