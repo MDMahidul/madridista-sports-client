@@ -26,6 +26,7 @@ import MyWishlist from "@/pages/UserMenu/MyWishlist";
 import ManageProducts from "@/pages/Dashboard/ManageProducts/ManageProducts";
 import ManageBlogs from "@/pages/Dashboard/ManageBlogs/ManageBlogs";
 import Orders from "@/pages/Dashboard/Orders/Orders";
+import BlogDetails from "@/pages/Blogs/BlogDetails";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/blogs",
         element: <Blogs />,
+      },
+      {
+        path: "/blogs/:id",
+        element: <BlogDetails />,
       },
       {
         path: "/about-us",

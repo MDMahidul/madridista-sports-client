@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Helmet } from "react-helmet-async";
-import { Link, useRouteError } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GiStopSign } from "react-icons/gi";
 
 const UnauthorizedPage = () => {

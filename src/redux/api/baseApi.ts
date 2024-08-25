@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { logOut, setUser } from "../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api",
+  baseUrl: "https://madridista-sports-server.vercel.app/api",
   /* to set cookies data */
   credentials: "include",
   /* send token through header to server */
@@ -33,7 +33,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   BaseQueryApi,
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
-  let result = (await baseQuery(args, api, extraOptions)) as TResponse;
+  let result = (await baseQuery(args, api, extraOptions)) as TResponse<any>;
 
   if (result?.error?.status === 404) {
     toast.error(result?.error?.data.message, {
@@ -49,7 +49,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   }
 
   if (result?.error?.status === 401) {
-    const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
+    const res = await fetch("https://madridista-sports-server.vercel.app/api/auth/refresh-token", {
       method: "POST",
       credentials: "include",
     });
@@ -62,7 +62,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       /* set user data fter server resend the access token */
       api.dispatch(setUser({ user, token: data.data.accessToken }));
 
-      result = await baseQuery(args, api, extraOptions);
+      result = (await baseQuery(args, api, extraOptions)) as TResponse<any>;
     } else {
       api.dispatch(logOut());
     }

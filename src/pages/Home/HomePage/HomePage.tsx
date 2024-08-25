@@ -6,6 +6,7 @@ import Categories from '../Categories/Categories';
 import Reviews from '../Reviews/Reviews';
 import { Helmet } from 'react-helmet-async';
 import TopRatedProducts from '../TopRatedProducts/TopRatedProducts';
+import Blogs from '../Blogs/Blogs';
 
 const HomePage = () => {
     return (
@@ -18,6 +19,7 @@ const HomePage = () => {
         <Categories />
         <TopRatedProducts/>
         <ContactUs />
+        <Blogs/>
         <Reviews />
         <Partners />
       </div>

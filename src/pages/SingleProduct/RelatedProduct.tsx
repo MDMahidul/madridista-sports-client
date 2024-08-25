@@ -17,7 +17,7 @@ type RelatedProductProps = {
 };
 
 const RelatedProduct: React.FC<RelatedProductProps> = ({ category, limit }) => {
-  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [params] = useState<TQueryParams[]>([]);
   const { data, isLoading, isError } = useGetAllProductsQuery(
     [
       { name: "category", value: category },

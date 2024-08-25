@@ -5,13 +5,7 @@ import Container from "@/components/Container/Container";
 import { useGetSingleProductQuery } from "@/redux/features/products/products.api";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Rating } from "@smastrom/react-rating";
-import {
-  ArrowLeftRight,
-  Lock,
-  Phone,
-  ShieldCheck,
-  ShoppingCart,
-} from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -28,6 +22,7 @@ import {
   SelectedWishList,
 } from "@/redux/features/wishList/wishListslice";
 import Loader from "@/components/Loader/Loader";
+import ServiceQuality from "@/components/Cards/ServiceQuality";
 
 const SingleProduct = () => {
   const [addToCart] = useAddToCartMutation();
@@ -293,42 +288,7 @@ const SingleProduct = () => {
               <div>Product not found</div>
             )}
           </div>
-          <FadeInUpAnimation>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 mb-10">
-              <div className="border shadow px-4 py-8 flex flex-col items-center">
-                <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                  <Lock className="text-white size-10" />
-                </div>
-                <p className="font-medium text-lg text-center">
-                  100% Secured Payment
-                </p>
-              </div>
-              <div className="border shadow px-4 py-8 flex flex-col items-center">
-                <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                  <Phone className="text-white size-10" />
-                </div>
-                <p className="font-medium text-lg text-center">
-                  24/7 Customer Service
-                </p>
-              </div>
-              <div className="border shadow px-4 py-8 flex flex-col items-center">
-                <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                  <ArrowLeftRight className="text-white size-10" />
-                </div>
-                <p className="font-medium text-lg text-center">
-                  7 Days Refund/Replacemnt
-                </p>
-              </div>
-              <div className="border shadow px-4 py-8 flex flex-col items-center">
-                <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                  <ShieldCheck className="text-white size-10" />
-                </div>
-                <p className="font-medium text-lg text-center">
-                  100% Authenticity Guaranteed
-                </p>
-              </div>
-            </div>
-          </FadeInUpAnimation>
+          <ServiceQuality />
         </Container>
       </div>
       <RelatedProduct category={product.category} limit={3} />

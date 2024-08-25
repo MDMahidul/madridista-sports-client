@@ -18,4 +18,5 @@ export type TBlog = {
   imageLink: string;
   description: string;
   isDeleted: boolean;
+  createdAt:string;
 };

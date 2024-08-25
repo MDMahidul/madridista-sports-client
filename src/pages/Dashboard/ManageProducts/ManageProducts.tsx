@@ -28,7 +28,7 @@ import LoadingError from "../../Error/LoadingError";
 
 const ManageProducts = () => {
   const [deleteProduct] = useDeleteProductMutation();
-  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [params] = useState<TQueryParams[]>([]);
   const [page, setPage] = useState(1);
   const { data, isLoading, isError } = useGetAllProductsQuery(
     [{ name: "page", value: page }, ...params],

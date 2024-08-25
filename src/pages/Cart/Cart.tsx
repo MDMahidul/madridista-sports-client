@@ -16,6 +16,12 @@ import Loader from "@/components/Loader/Loader";
 import LoadingError from "../Error/LoadingError";
 import DeleteModal from "@/components/Modals/DeleteModal";
 import useUserProfile from "@/hooks/useUserProfile";
+import {
+  calculateItemPrice,
+  calculateTotalPrice,
+  calculateTotalPriceWithVAT,
+  calculateTotalVAT,
+} from "@/utils/cartUtils";
 
 const CartPage = () => {
   const [removeCartItem] = useRemoveCartItemMutation();
@@ -23,7 +29,7 @@ const CartPage = () => {
   const [updateCart] = useUpdateCartMutation();
   const { token } = useUserProfile();
   const {
-    data: cartData,
+    data: cartData, 
     isError,
     isLoading,
   } = useGetCartQuery({ token: token }, { skip: !token });
@@ -42,7 +48,7 @@ const CartPage = () => {
     };
     try {
       await updateCart({ updateItem, token }).unwrap();
-    } catch (error) {
+    } catch (error:any) {
       toast.error(error?.data?.message || "Something went wrong !", {
         duration: 2000,
       });
@@ -56,50 +62,17 @@ const CartPage = () => {
     };
     try {
       await updateCart({ updateItem, token }).unwrap();
-    } catch (error) {
+    } catch (error:any) {
       toast.error(error?.data?.message || "Something went wrong !", {
         duration: 2000,
       });
     }
   };
 
-  //calculate total price for a single item
-  const calculateItemPrice = (price: number, quantity: number) => {
-    return price * quantity;
-  };
-
-  //calculate total price for all items
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    for (const item of cartItems) {
-      const itemId = item._id;
-      if (itemId) {
-        //const quantity = quantities[itemId] ?? 1;
-        const itemPrice = calculateItemPrice(
-          item?.product?.price,
-          item?.quantity
-        );
-        totalPrice += itemPrice;
-      } else {
-        console.error("Item without _id:", item);
-      }
-    }
-    return totalPrice;
-  };
-
-  //calculate total VAT
-  const calculateTotalVAT = () => {
-    const totalPrice = calculateTotalPrice();
-    const vatRate = 0.15; // 15% VAT
-    return totalPrice * vatRate;
-  };
-
-  //calculate total price with VAT
-  const calculateTotalPriceWithVAT = () => {
-    const totalPrice = calculateTotalPrice();
-    const vatRate = 0.15; // 15% VAT
-    return totalPrice * (1 + vatRate);
-  };
+  /* use utils to calculate price */
+  const totalPrice = calculateTotalPrice(cartItems);
+  const totalVAT = calculateTotalVAT(totalPrice);
+  const totalPriceWithVAT = calculateTotalPriceWithVAT(totalPrice);
 
   // remove item from cart
   const handleRemoveItem = async (productId: string) => {
@@ -251,16 +224,16 @@ const CartPage = () => {
                   </div>
                   <div>
                     <p className="text-lg text-gray-700 font-semibold mb-1">
-                      ${calculateTotalPrice().toFixed(2)}
+                      ${totalPrice.toFixed(2)}
                     </p>
                     <p className="text-lg text-gray-700 font-semibold mb-1">
-                      ${calculateTotalVAT().toFixed(2)}
+                      ${totalVAT.toFixed(2)}
                     </p>
                     <p className="text-lg text-gray-700 font-semibold mb-1">
                       Free
                     </p>
                     <p className="text-lg text-gray-700 font-semibold mb-1">
-                      ${calculateTotalPriceWithVAT().toFixed(2)}
+                      ${totalPriceWithVAT.toFixed(2)}
                     </p>
                   </div>
                 </div>

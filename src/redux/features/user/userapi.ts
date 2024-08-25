@@ -3,23 +3,6 @@ import { baseApi } from "@/redux/api/baseApi";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    /*  getAllProducts: builder.query({
-      query: (args) => {
-        const params = new URLSearchParams();
-
-        if (args) {
-          args.forEach((item: TQueryParams) => {
-            params.append(item.name, item.value as string);
-          });
-        }
-        return {
-          url: `/product/all-products`,
-          method: "GET",
-          params: params,
-        };
-      },
-      providesTags: ["products"],
-    }), */
     getUserProfie: builder.query({
       query: (token) => ({
         method: "GET",

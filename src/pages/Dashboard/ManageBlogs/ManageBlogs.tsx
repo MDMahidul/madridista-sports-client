@@ -36,7 +36,7 @@ import useUserProfile from "@/hooks/useUserProfile";
 
 const ManageBlogs = () => {
   const token = useUserProfile();
-  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [params] = useState<TQueryParams[]>([]);
   const [deleteBlog] = useDeleteBlogMutation();
   const [page, setPage] = useState(1);
   const {

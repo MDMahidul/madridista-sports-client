@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import LoadingError from "../Error/LoadingError";
 import { toast } from "sonner";
 import DeleteModal from "@/components/Modals/DeleteModal";
+import { calculateItemPrice, calculateTotalPrice, calculateTotalPriceWithVAT, calculateTotalVAT } from "@/utils/cartUtils";
 
 const MyCart = () => {
   const [removeCartItem] = useRemoveCartItemMutation();
@@ -33,11 +34,6 @@ const MyCart = () => {
     <LoadingError />;
   }
   const cartItems = cartData?.data?.items || [];
-
-  //calculate total price for a single item
-  const calculateItemPrice = (price: number, quantity: number) => {
-    return price * quantity;
-  };
 
   const decreaseQuantity = async (id: string) => {
     const updateItem = {
@@ -86,38 +82,10 @@ const MyCart = () => {
     await clearCartItem({ token }).unwrap();
   };
 
-  //calculate total price for all items
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    for (const item of cartItems) {
-      const itemId = item._id;
-      if (itemId) {
-        //const quantity = quantities[itemId] ?? 1;
-        const itemPrice = calculateItemPrice(
-          item?.product?.price,
-          item?.quantity
-        );
-        totalPrice += itemPrice;
-      } else {
-        console.error("Item without _id:", item);
-      }
-    }
-    return totalPrice;
-  };
-
-  //calculate total VAT
-  const calculateTotalVAT = () => {
-    const totalPrice = calculateTotalPrice();
-    const vatRate = 0.15; // 15% VAT
-    return totalPrice * vatRate;
-  };
-
-  //calculate total price with VAT
-  const calculateTotalPriceWithVAT = () => {
-    const totalPrice = calculateTotalPrice();
-    const vatRate = 0.15; // 15% VAT
-    return totalPrice * (1 + vatRate);
-  };
+  /* use utils to calculate price */
+  const totalPrice = calculateTotalPrice(cartItems);
+  const totalVAT = calculateTotalVAT(totalPrice);
+  const totalPriceWithVAT = calculateTotalPriceWithVAT(totalPrice);
 
   return (
     <div className="mt-10 mb-20  sm:mb-40">
@@ -234,16 +202,16 @@ const MyCart = () => {
                       </div>
                       <div>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
-                          ${calculateTotalPrice().toFixed(2)}
+                          ${totalPrice.toFixed(2)}
                         </p>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
-                          ${calculateTotalVAT().toFixed(2)}
+                          ${totalVAT.toFixed(2)}
                         </p>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
                           Free
                         </p>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
-                          ${calculateTotalPriceWithVAT().toFixed(2)}
+                          ${totalPriceWithVAT.toFixed(2)}
                         </p>
                       </div>
                     </div>

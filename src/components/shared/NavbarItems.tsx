@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
@@ -8,12 +9,20 @@ import DropdownMenu from "../DropdownMenu/DropdownMenu";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FaRegHeart } from "react-icons/fa";
 import { Tooltip } from "flowbite-react";
-import LoadingError from "@/pages/Error/LoadingError";
-import { useGetCartQuery } from "@/redux/features/cart/cart.api";
-import { useCurrentToken } from "@/redux/features/auth/authSlice";
+import {
+  selectCurrentUser,
+  useCurrentToken,
+} from "@/redux/features/auth/authSlice";
+import useCart from "@/hooks/useCart";
 
 const NavbarItems = () => {
   const token = useAppSelector(useCurrentToken);
+  const user = useAppSelector(selectCurrentUser);
+
+  /* only fire when user role is user */
+  const cartData = user?.role === "user" ? useCart() : null;
+  const cartItems = cartData?.cartData.data;
+  
   const [navbarHeight, setNavbarHeight] = useState("py-5");
   /* control nabar bg */
   useEffect(() => {
@@ -27,15 +36,6 @@ const NavbarItems = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  /* retrive cart items */
-  const { data, isError, isLoading } = useGetCartQuery({ token: token },{skip: !token});
-  if (isLoading) {
-    return null;
-  }
-  if (isError || !data) {
-    <LoadingError />;
-  }
 
   return (
     <Navbar
@@ -67,7 +67,7 @@ const NavbarItems = () => {
               <HiOutlineShoppingBag className="text-2xl sm:text-3xl text-primary" />
 
               <span className="absolute -top-1 -right-2 bg-tertiary rounded-full font-medium text-[10px] px-1.5 py-[1px] text-white">
-                {!token ? 0 : data?.data?.items?.length || 0}
+                {!token ? 0 : cartItems?.items?.length || 0}
               </span>
             </Link>
           </Tooltip>

@@ -18,7 +18,7 @@ const ContactUs = () => {
         <SectionHeader heading={"Contact Us"} />
         <Container>
           <FadeInUpAnimation>
-            <div className="grid grid-cols-1 md:grid-cols-2 my-5 py-4 px-8 border-2 border-gray-50 gap-4 shadow">
+            <div className="grid grid-cols-1 md:grid-cols-2  py-4 px-8 border-2 border-gray-50 gap-4 shadow">
               <div className="flex justify-center items-center">
                 <Lottie
                   className="max-w-[200px] md:max-w-sm"

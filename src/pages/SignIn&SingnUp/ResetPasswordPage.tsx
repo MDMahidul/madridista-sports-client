@@ -6,8 +6,6 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useResetpasswordMutation } from "@/redux/features/auth/auth.api";
 import { ImSpinner9 } from "react-icons/im";
 import { toast } from "sonner";
-import { useAppDispatch } from "@/redux/hooks";
-import { verifyToken } from "@/utils/verifyToken";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();

@@ -9,7 +9,6 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { IconType } from "react-icons";
 import MenuOptions from "./MenuOptions";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";

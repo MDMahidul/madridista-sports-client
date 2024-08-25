@@ -4,7 +4,6 @@ import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/Headers/SectionsHeader";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { FieldValues, useForm } from "react-hook-form";
-import { ArrowLeftRight, Lock, Phone, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { TruckIcon } from "@heroicons/react/24/solid";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,6 +15,12 @@ import LoadingError from "../Error/LoadingError";
 import { useCurrentToken } from "@/redux/features/auth/authSlice";
 import { useAddOrderMutation } from "@/redux/features/order/orderapi";
 import { placeOrder } from "@/redux/features/order/order.slice";
+import ServiceQuality from "@/components/Cards/ServiceQuality";
+import {
+  calculateTotalPrice,
+  calculateTotalPriceWithVAT,
+  calculateTotalVAT,
+} from "@/utils/cartUtils";
 
 const CheckOut = () => {
   const token = useAppSelector(useCurrentToken);
@@ -44,43 +49,10 @@ const CheckOut = () => {
   }
   const cartItems = cartData?.data?.items || [];
 
-  //calculate total price for a single item
-  const calculateItemPrice = (price: number, quantity: number) => {
-    return price * quantity;
-  };
-
-  //calculate total price for all items
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    for (const item of cartItems) {
-      const itemId = item._id;
-      if (itemId) {
-        //const quantity = quantities[itemId] ?? 1;
-        const itemPrice = calculateItemPrice(
-          item?.product?.price,
-          item?.quantity
-        );
-        totalPrice += itemPrice;
-      } else {
-        console.error("Item without _id:", item);
-      }
-    }
-    return totalPrice;
-  };
-
-  //calculate total VAT
-  const calculateTotalVAT = () => {
-    const totalPrice = calculateTotalPrice();
-    const vatRate = 0.15; // 15% VAT
-    return totalPrice * vatRate;
-  };
-
-  //calculate total price with VAT
-  const calculateTotalPriceWithVAT = () => {
-    const totalPrice = calculateTotalPrice();
-    const vatRate = 0.15; // 15% VAT
-    return totalPrice * (1 + vatRate);
-  };
+  /* use utils to calculate price */
+  const totalPrice = calculateTotalPrice(cartItems);
+  const totalVAT = calculateTotalVAT(totalPrice);
+  const totalPriceWithVAT = calculateTotalPriceWithVAT(totalPrice);
 
   const onSubmit = async (data: FieldValues) => {
     const orderData = {
@@ -113,7 +85,7 @@ const CheckOut = () => {
         <SectionHeader heading="Checkout Page" />
         {cartItems.length <= 0 ? (
           <FadeInUpAnimation>
-            <div className="text-center ">
+            <div className=" text-center flex justify-center items-center ">
               <p className="text-lg  text-gray-500 font-semibold mb-10">
                 Your cart is empty.
               </p>
@@ -228,16 +200,16 @@ const CheckOut = () => {
                       </div>
                       <div>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
-                          ${calculateTotalPrice().toFixed(2)}
+                          ${totalPrice.toFixed(2)}
                         </p>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
-                          ${calculateTotalVAT().toFixed(2)}
+                          ${totalVAT.toFixed(2)}
                         </p>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
                           Free
                         </p>
                         <p className="text-lg text-gray-700 font-semibold mb-1">
-                          ${calculateTotalPriceWithVAT().toFixed(2)}
+                          ${totalPriceWithVAT.toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -258,42 +230,7 @@ const CheckOut = () => {
             </FadeInUpAnimation>
           </>
         )}
-        <FadeInUpAnimation>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-20">
-            <div className="border shadow px-4 py-8 flex flex-col items-center">
-              <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                <Lock className="text-white size-10" />
-              </div>
-              <p className="font-medium text-lg text-center">
-                100% Secured Payment
-              </p>
-            </div>
-            <div className="border shadow px-4 py-8 flex flex-col items-center">
-              <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                <Phone className="text-white size-10" />
-              </div>
-              <p className="font-medium text-lg text-center">
-                24/7 Customer Service
-              </p>
-            </div>
-            <div className="border shadow px-4 py-8 flex flex-col items-center">
-              <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                <ArrowLeftRight className="text-white size-10" />
-              </div>
-              <p className="font-medium text-lg text-center">
-                7 Days Refund/Replacemnt
-              </p>
-            </div>
-            <div className="border shadow px-4 py-8 flex flex-col items-center">
-              <div className="bg-tertiary p-4 rounded-full mb-3 flex items-center justify-center">
-                <ShieldCheck className="text-white size-10" />
-              </div>
-              <p className="font-medium text-lg text-center">
-                100% Authenticity Guaranteed
-              </p>
-            </div>
-          </div>
-        </FadeInUpAnimation>
+        <ServiceQuality />
       </Container>
     </div>
   );

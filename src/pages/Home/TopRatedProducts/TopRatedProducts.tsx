@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const TopRatedProducts = () => {
-  const [params, setParams] = useState<TQueryParams[]>([]);
+  const [params] = useState<TQueryParams[]>([]);
   const {
     data: products,
     isLoading,
@@ -51,7 +51,7 @@ const TopRatedProducts = () => {
         <FadeInUpAnimation>
           <div className="text-center">
             <Link to={"/all-products"}>
-              <button className="seceondary-button my-10">Explore More</button>
+              <button className="seceondary-button mt-10">Explore More</button>
             </Link>
           </div>
         </FadeInUpAnimation>

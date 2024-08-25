@@ -79,7 +79,7 @@ const WishListPage = () => {
         <div>
           {wishListItems.length === 0 ? (
             <FadeInUpAnimation>
-              <div className="text-center ">
+              <div className="text-center flex justify-center items-center flex-col h-[50vh]">
                 <p className="text-lg  text-gray-500 font-semibold mb-10">
                   Your wishlist is empty.
                 </p>
